@@ -21,5 +21,6 @@ func init() {
 	})
 
 	// add commands in here
-	Bot.AddCommand(helloCommand)
+	Bot.AddCommand(linkCommand)
+	Bot.AddCommand(profileCommand)
 }

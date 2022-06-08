@@ -1,10 +1,16 @@
 github.com/TheBoringDude/minidis v0.0.0-20220601100758-ff1d7d690fa1 h1:TypeP15T0LKYkfJpqvHZpwnjFlVwUQey87V/cZIRMM8=
 github.com/TheBoringDude/minidis v0.0.0-20220601100758-ff1d7d690fa1/go.mod h1:CzTbpIH9l12BgcQd/N/QIbSkBlkYok6HNn6qWdfSmPg=
+github.com/TheBoringDude/minidis v0.0.0-20220608035502-9e583324d181 h1:oHd8wCcpIObJ9LIpNU2Iylh64IQt6wpusW/iUbgK4Fg=
+github.com/TheBoringDude/minidis v0.0.0-20220608035502-9e583324d181/go.mod h1:CzTbpIH9l12BgcQd/N/QIbSkBlkYok6HNn6qWdfSmPg=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647 h1:j1YV+BBsPbJKdtt0zSXY79WjITv592e3MWgVWXpldsc=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647/go.mod h1:NJZpH+1AfhIcyQsPeuBKsUtYrRnjkyu0kIVMCHkZtRY=
+github.com/deta/deta-go v1.0.0 h1:vg94dg2t7ChYhs8DEn4oXLzLAGGafgCSClHfMYrVFvY=
+github.com/deta/deta-go v1.0.0/go.mod h1:vbQaUT8iD6xREm816eNp7Nw1aewd95dpcb/uj0T2vuY=
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
 github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
+github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b/go.mod h1:T9bdIzuCu7OtxOm1hfPfRQxPLYneinmdGuTeoZ9dtd4=
 golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e h1:T8NU3HyQ8ClP4SEE+KbFlg6n0NhuTsN4MyznaarGsZM=
 golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=

@@ -49,10 +49,11 @@ func includes(arr []string, value string) bool {
 	return false
 }
 
-func itemsDps(wallet string, skins []atomicassets.AssetsDataProps) int {
-	data := FetchAllAssets(wallet, "pupskincards")
+func itemsDps(wallet string, skins []atomicassets.AssetsDataProps) (int, int) {
+	data := FetchAllAssets(wallet, "pupitems")
 
-	dps := 0
+	realDps := 0
+	rawDps := 0
 
 	for _, v := range data {
 		for _, x := range skins {
@@ -68,29 +69,43 @@ func itemsDps(wallet string, skins []atomicassets.AssetsDataProps) int {
 			itemOwner := v.Data["Item Owner"].(string)
 			if name == itemOwner {
 				num, _ := strconv.Atoi(v.Data["DPS"].(string))
-				dps += num
+				realDps += num
 				break
 			}
 		}
 	}
 
-	return dps
+	for _, v := range data {
+		num, _ := strconv.Atoi(v.Data["DPS"].(string))
+		rawDps += num
+	}
+
+	return realDps, rawDps
 }
 
 type DPSProps struct {
 	PupSkinCards int
 	PuppyCards   int
-	PupItems     int
+	PupItems     DPSItemsProps
 }
 
+type DPSItemsProps struct {
+	Real int
+	Raw  int
+}
+
+// fetches and calculates each type's dps
 func Calculate(wallet string) DPSProps {
 	cards := cardsDps(wallet)
 	skinsData, skins := skinsDps(wallet)
-	items := itemsDps(wallet, skinsData)
+	itemsReal, itemsRaw := itemsDps(wallet, skinsData)
 
 	return DPSProps{
 		PupSkinCards: skins,
 		PuppyCards:   cards,
-		PupItems:     items,
+		PupItems: DPSItemsProps{
+			Real: itemsReal,
+			Raw:  itemsRaw,
+		},
 	}
 }

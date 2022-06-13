@@ -69,7 +69,7 @@ var dpsCommand = &minidis.SlashCommandProps{
 		}
 
 		// promote the user
-		if err := lib.HandleRole(c.Session, c.Member, c.GuildId, totalDps); err != nil {
+		if err := lib.HandleRole(c.Session, userid, c.GuildId, totalDps); err != nil {
 			_, err := c.Followup("There was a problem trying to promote the user. If the problem persists please contact an admin.")
 			return err
 		}

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/World-of-Cryptopups/atomicassets-go"
+	"github.com/World-of-Cryptopups/cordy/lib"
 )
 
 type GetDPSProps struct {
@@ -83,27 +84,16 @@ func itemsDps(wallet string, skins []atomicassets.AssetsDataProps) (int, int) {
 	return realDps, rawDps
 }
 
-type DPSProps struct {
-	PupSkinCards int
-	PuppyCards   int
-	PupItems     DPSItemsProps
-}
-
-type DPSItemsProps struct {
-	Real int
-	Raw  int
-}
-
 // fetches and calculates each type's dps
-func Calculate(wallet string) DPSProps {
+func Calculate(wallet string) lib.DPSProps {
 	cards := cardsDps(wallet)
 	skinsData, skins := skinsDps(wallet)
 	itemsReal, itemsRaw := itemsDps(wallet, skinsData)
 
-	return DPSProps{
+	return lib.DPSProps{
 		PupSkinCards: skins,
 		PuppyCards:   cards,
-		PupItems: DPSItemsProps{
+		PupItems: lib.DPSItemsProps{
 			Real: itemsReal,
 			Raw:  itemsRaw,
 		},

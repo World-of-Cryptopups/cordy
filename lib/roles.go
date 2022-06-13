@@ -110,7 +110,7 @@ func GetDPSRoleInfo(dps int) DPSStats {
 }
 
 // promotes the user with his/her dps stats
-func HandleRole(session *discordgo.Session, member *discordgo.Member, guildId string, dps int) error {
+func HandleRole(session *discordgo.Session, userid string, guildId string, dps int) error {
 	d := GetDPSRoleInfo(dps)
 
 	if d.Title == "" {
@@ -120,11 +120,11 @@ func HandleRole(session *discordgo.Session, member *discordgo.Member, guildId st
 	// promote the user
 	for i, v := range Roles {
 		if i <= dps {
-			if err := session.GuildMemberRoleAdd(guildId, member.User.ID, v.RoleID); err != nil {
+			if err := session.GuildMemberRoleAdd(guildId, userid, v.RoleID); err != nil {
 				return err
 			}
 		} else {
-			if err := session.GuildMemberRoleRemove(guildId, member.User.ID, v.RoleID); err != nil {
+			if err := session.GuildMemberRoleRemove(guildId, userid, v.RoleID); err != nil {
 				return err
 			}
 		}

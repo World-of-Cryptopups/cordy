@@ -8,4 +8,5 @@ import (
 var (
 	GUILD = strings.Split(os.Getenv("GUILD"), ",")
 	TOKEN = os.Getenv("TOKEN")
+	DEV   = os.Getenv("DEV") == "true"
 )

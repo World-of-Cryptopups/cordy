@@ -6,6 +6,7 @@ import (
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/commands/admin"
 	"github.com/World-of-Cryptopups/cordy/lib"
+	"github.com/World-of-Cryptopups/cordy/lib/auto"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -19,6 +20,11 @@ func init() {
 
 	Bot.OnReady(func(s *discordgo.Session, i *discordgo.Ready) {
 		log.Println("Bot is ready!")
+
+		if !lib.DEV {
+			// no need to start when in dev mode
+			go auto.Start(s, lib.GUILD[0])
+		}
 	})
 
 	// add commands in here

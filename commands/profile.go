@@ -2,11 +2,20 @@ package commands
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/TheBoringDude/minidis"
+	"github.com/World-of-Cryptopups/atomicassets-go"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/bwmarrin/discordgo"
 )
+
+func GetAccountStats(wallet string) atomicassets.AccountCollectionDataProps {
+	q, err := lib.Atom.GetAccountCollection(wallet, "cryptopuppie")
+	lib.LogError(err)
+
+	return q.Data
+}
 
 var profileCommand = &minidis.SlashCommandProps{
 	Name:        "profile",
@@ -22,6 +31,26 @@ var profileCommand = &minidis.SlashCommandProps{
 			return err
 		}
 
+		stats := GetAccountStats(user.Wallet)
+
+		embedFields := []*discordgo.MessageEmbedField{
+			{
+				Name:  ":credit_card: Wallet",
+				Value: user.Wallet,
+			},
+			{
+				Name:  "\u200b",
+				Value: "~ your current collection stats ~",
+			},
+		}
+		for _, v := range stats.Schemas {
+			embedFields = append(embedFields, &discordgo.MessageEmbedField{
+				Name:   v.SchemaName,
+				Value:  v.Assets,
+				Inline: true,
+			})
+		}
+
 		embed := &discordgo.MessageEmbed{
 			Author: &discordgo.MessageEmbedAuthor{
 				Name:    c.Author.Username,
@@ -32,10 +61,8 @@ var profileCommand = &minidis.SlashCommandProps{
 				URL: c.Author.AvatarURL(""),
 			},
 			Description: "Your user profile",
-			Fields: []*discordgo.MessageEmbedField{{
-				Name:  ":credit_card: Wallet",
-				Value: user.Wallet,
-			}},
+			Fields:      embedFields,
+			Timestamp:   time.Now().Format(time.RFC3339),
 		}
 
 		return c.EditC(minidis.EditProps{

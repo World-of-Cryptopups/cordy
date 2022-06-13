@@ -28,7 +28,7 @@ var dpsCommand = &minidis.SlashCommandProps{
 
 		embed := &discordgo.MessageEmbed{
 			Title:       fmt.Sprintf("DPS Stats - %s", c.Author.Username),
-			Description: "Your collection's dps stats",
+			Description: fmt.Sprintf("Your collection's dps stats (%s)", user.Wallet),
 			Author: &discordgo.MessageEmbedAuthor{
 				Name:    c.Author.Username,
 				IconURL: c.Author.AvatarURL(""),
@@ -66,6 +66,12 @@ var dpsCommand = &minidis.SlashCommandProps{
 					Value: fmt.Sprintf("**%d**", totalDps)},
 			},
 			Timestamp: time.Now().Format(time.RFC3339),
+		}
+
+		// promote the user
+		if err := lib.HandleRole(c.Session, c.Member, c.GuildId, totalDps); err != nil {
+			_, err := c.Followup("There was a problem trying to promote the user. If the problem persists please contact an admin.")
+			return err
 		}
 
 		return c.EditC(minidis.EditProps{

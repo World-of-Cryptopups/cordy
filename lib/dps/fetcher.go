@@ -5,15 +5,13 @@ import (
 	"github.com/World-of-Cryptopups/cordy/lib"
 )
 
-var a = atomicassets.New()
-
 // FetchAllAssets queries all of the assets in the specified schema.
 func FetchAllAssets(wallet string, schema string) []atomicassets.AssetsDataProps {
 	allData := []atomicassets.AssetsDataProps{}
 
 	page := 1
 	for {
-		q, err := a.GetAssets(&atomicassets.GetAssetsQuery{
+		q, err := lib.Atom.GetAssets(&atomicassets.GetAssetsQuery{
 			CollectionName: "cryptopuppie",
 			Limit:          1000,
 			Owner:          wallet,

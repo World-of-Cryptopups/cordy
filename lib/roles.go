@@ -2,8 +2,6 @@ package lib
 
 import (
 	"errors"
-	"os"
-	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,8 +11,6 @@ type DPSStats struct {
 	RoleID string
 	Color  string
 }
-
-var initRoles = strings.Split(os.Getenv("ROLES"), ",")
 
 const PupsWarrior = 3000
 const PupsKnight = 5000
@@ -28,37 +24,37 @@ const PupsDoggosOfEternity = 145000
 var Roles = map[int]DPSStats{
 	PupsWarrior: {
 		Title:  "Warrior Pups",
-		RoleID: initRoles[0],
+		RoleID: InitRoles[0],
 		Color:  "green",
 	},
 	PupsKnight: {
 		Title:  "Knight Pups",
-		RoleID: initRoles[1],
+		RoleID: InitRoles[1],
 		Color:  "blue",
 	},
 	PupsOverlord: {
 		Title:  "Overlord Pups",
-		RoleID: initRoles[2],
+		RoleID: InitRoles[2],
 		Color:  "purple",
 	},
 	PupsApocalypse: {
 		Title:  "Pups of the Apocalypse",
-		RoleID: initRoles[3],
+		RoleID: InitRoles[3],
 		Color:  "red",
 	},
 	PupsAboveAll: {
 		Title:  "Pups Above All",
-		RoleID: initRoles[4],
+		RoleID: InitRoles[4],
 		Color:  "orange",
 	},
 	PupsDoggosOfInfinity: {
 		Title:  "Doggos of Infinity",
-		RoleID: initRoles[5],
+		RoleID: InitRoles[5],
 		Color:  "gold",
 	},
 	PupsDoggosOfEternity: {
 		Title:  "Doggos of Eternity",
-		RoleID: initRoles[6],
+		RoleID: InitRoles[6],
 		Color:  "white",
 	},
 }

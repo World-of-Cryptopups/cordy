@@ -46,7 +46,7 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 	Name:        "reset-roles",
 	Description: "Reset the roles of all members in the server",
 	Execute: func(c *minidis.SlashContext) error {
-		c.DeferReply(true)
+		c.DeferReply(false)
 
 		// https://github.com/bwmarrin/discordgo/issues/1024
 		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
@@ -62,10 +62,16 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 		allMembers := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range allMembers {
-			// check and remove the roles of all of the members in here
-			fmt.Println(v)
+			// remove all of the roles in here
+			for _, r := range lib.ALL_ROLES {
+				if err = c.Session.GuildMemberRoleRemove(c.GuildId, v.User.ID, r); err != nil {
+					fmt.Println(err)
+					_, e := c.Followup(fmt.Sprintf("Failed to reset the role of %s", v.User.Username))
+					return e
+				}
+			}
 		}
 
-		return c.Edit("members length ")
+		return c.Edit("Successfully reset the roles of the all of the members in the server.")
 	},
 }

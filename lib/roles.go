@@ -1,8 +1,6 @@
 package lib
 
 import (
-	"errors"
-
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -109,19 +107,17 @@ func GetDPSRoleInfo(dps int) DPSStats {
 func HandleRole(session *discordgo.Session, userid string, guildId string, dps int) error {
 	d := GetDPSRoleInfo(dps)
 
-	if d.Title == "" {
-		return errors.New("there was a problem trying to promote the user")
-	}
-
-	// promote the user
-	for i, v := range Roles {
-		if i <= dps {
-			if err := session.GuildMemberRoleAdd(guildId, userid, v.RoleID); err != nil {
-				return err
-			}
-		} else {
-			if err := session.GuildMemberRoleRemove(guildId, userid, v.RoleID); err != nil {
-				return err
+	if d.Title != "" {
+		// promote the user
+		for i, v := range Roles {
+			if i <= dps {
+				if err := session.GuildMemberRoleAdd(guildId, userid, v.RoleID); err != nil {
+					return err
+				}
+			} else {
+				if err := session.GuildMemberRoleRemove(guildId, userid, v.RoleID); err != nil {
+					return err
+				}
 			}
 		}
 	}

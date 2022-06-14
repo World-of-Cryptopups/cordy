@@ -4,12 +4,21 @@ type User struct {
 	Key    string `json:"key"`
 	ID     string `json:"id"`
 	Wallet string `json:"wallet"`
+	Token  string `json:"token"`
 }
 
 type UserDpsProps struct {
 	Key string   `json:"key"`
 	ID  string   `json:"id"`
 	Dps DPSProps `json:"dps"`
+}
+
+type WebLoginUserProps struct {
+	Key    string `json:"key"`
+	Token  string `json:"token"`
+	Type   string `json:"type"`
+	Wallet string `json:"wallet"`
+	Linked bool   `json:"linked,omitempty"`
 }
 
 type DPSProps struct {

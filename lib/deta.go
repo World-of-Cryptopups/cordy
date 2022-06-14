@@ -33,6 +33,39 @@ func UsersDpsBase() *base.Base {
 	return base
 }
 
+// base on the web login
+func WebLoginBase() *base.Base {
+	d := Deta()
+
+	base, err := base.New(d, "WebLogin")
+	LogError(err)
+
+	return base
+}
+
+// gets the wallet with the token
+func FetchWebLoginToken(token string) WebLoginUserProps {
+	var login []WebLoginUserProps
+	loginsBase := WebLoginBase()
+
+	_, err := loginsBase.Fetch(
+		&base.FetchInput{
+			Q: base.Query{
+				{"token": token},
+			},
+			Dest:  &login,
+			Limit: 1,
+		},
+	)
+	LogError(err)
+
+	if len(login) == 0 {
+		return WebLoginUserProps{}
+	}
+
+	return login[0]
+}
+
 // fetch a user,
 // returns a user struct and bool if the user exists
 func GetUser(userid string) (User, bool) {

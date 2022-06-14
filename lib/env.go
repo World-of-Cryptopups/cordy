@@ -13,4 +13,6 @@ var (
 	ADVENTURE_ROLE = os.Getenv("ADVENTURE_ROLE")
 	InitRoles      = strings.Split(os.Getenv("ROLES"), ",")
 	ALL_ROLES      = append(InitRoles, ADVENTURE_ROLE)
+	MOD_ROLE       = os.Getenv("MOD_ROLE")
+	ADMIN_ROLE     = os.Getenv("ADMIN_ROLE")
 )

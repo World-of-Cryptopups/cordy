@@ -33,6 +33,8 @@ func init() {
 	Bot.AddCommand(dpsCommand)
 	Bot.AddCommand(helpCommand)
 	Bot.AddCommand(admin.ResetRolesCommand)
+	Bot.AddCommand(admin.ListUnverifiedCommand)
+	Bot.AddCommand(admin.KickUnverifiedCommand)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

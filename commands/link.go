@@ -41,6 +41,6 @@ var linkCommand = &minidis.SlashCommandProps{
 			return err
 		}
 
-		return c.Edit("Successfully linked your wallet with your User ID.")
+		return c.Edit("Successfully linked your wallet with your User ID. You can now check you DPS stats with `/dps` command and your role will be updated.")
 	},
 }

@@ -31,5 +31,10 @@ func init() {
 	Bot.AddCommand(linkCommand)
 	Bot.AddCommand(profileCommand)
 	Bot.AddCommand(dpsCommand)
+	Bot.AddCommand(helpCommand)
 	Bot.AddCommand(admin.ResetRolesCommand)
+
+	// components
+	Bot.AddComponentHandler(profileBtn)
+	Bot.AddComponentHandler(dpsBtn)
 }

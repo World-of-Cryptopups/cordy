@@ -19,6 +19,40 @@ func hasRole(r string, roles []string) bool {
 	return false
 }
 
+func chunkMembersArray(members []*discordgo.Member) [][]*discordgo.Member {
+	var memsList = make([][]*discordgo.Member, int(len(members)/50)+1)
+
+	var i = 0
+	for _, v := range members {
+		if len(memsList) > 0 {
+			if len(memsList[i]) == 50 {
+				i++
+			}
+		}
+
+		memsList[i] = append(memsList[i], v)
+	}
+
+	return memsList
+}
+
+func chunkEmbeds(embeds []*discordgo.MessageEmbed) [][]*discordgo.MessageEmbed {
+	var grps = make([][]*discordgo.MessageEmbed, int(len(embeds)/10)+1)
+
+	var i = 0
+	for _, v := range embeds {
+		if len(grps) > 0 {
+			if len(grps[i]) == 10 {
+				i++
+			}
+		}
+
+		grps[i] = append(grps[i], v)
+	}
+
+	return grps
+}
+
 func GetAllUnverifiedMembers(guildId string, session *discordgo.Session) []*discordgo.Member {
 	allMembers := GetAllMembers(guildId, session)
 
@@ -60,26 +94,45 @@ var ListUnverifiedCommand = &minidis.SlashCommandProps{
 			return c.Edit("You do not have permission to perform such actions!")
 		}
 
-		mems := GetAllUnverifiedMembers(c.GuildId, c.Session)
+		mems := chunkMembersArray(GetAllUnverifiedMembers(c.GuildId, c.Session))
 
-		memsStr := ""
-		for _, v := range mems {
-			memsStr += fmt.Sprintf("`%s`\n", v.User.Username)
-		}
+		embeds := []*discordgo.MessageEmbed{}
+		for _, x := range mems {
+			memsStr := ""
 
-		embed := &discordgo.MessageEmbed{
-			Title: "List of Unverified Members",
-			Description: fmt.Sprintf(`The following are users/members that are verified in the server
+			for _, v := range x {
+				memsStr += fmt.Sprintf("`%s`\n", v.User.Username)
+			}
 
+			embed := &discordgo.MessageEmbed{
+				Title: "List of Unverified Members",
+				Description: fmt.Sprintf(`The following are users/members that are verified in the server
+	
 	%s
-			`, memsStr),
+				`, memsStr),
+			}
+
+			embeds = append(embeds, embed)
 		}
 
-		return c.EditC(minidis.EditProps{
-			Embeds: []*discordgo.MessageEmbed{
-				embed,
-			},
-		})
+		cEmbeds := chunkEmbeds(embeds)
+
+		for i, v := range cEmbeds {
+			if i == 0 {
+				c.EditC(minidis.EditProps{
+					Embeds: v,
+				})
+
+				continue
+			}
+
+			c.FollowupC(minidis.FollowupProps{
+				Embeds: v,
+			})
+		}
+
+		return nil
+
 	},
 }
 
@@ -110,6 +163,6 @@ var KickUnverifiedCommand = &minidis.SlashCommandProps{
 			}
 		}
 
-		return c.Edit("- not yet done huhu")
+		return c.Edit("Successfully kicked all unverified members in the server.")
 	},
 }

@@ -72,10 +72,10 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 			// remove all of the roles in here
 			for _, r := range lib.ALL_ROLES {
 				if err = c.Session.GuildMemberRoleRemove(c.GuildId, v.User.ID, r); err != nil {
-					fmt.Println(err)
+					fmt.Printf("Failed to remove the role of %s, error: %v\n", v.User.Username, err)
 
-					_, e := c.Followup(fmt.Sprintf("Failed to reset the role of %s", v.User.Username))
-					return e
+					// _, e := c.Followup(fmt.Sprintf("Failed to reset the role of %s", v.User.Username))
+					// return e
 				}
 			}
 		}

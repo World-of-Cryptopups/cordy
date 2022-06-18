@@ -62,6 +62,11 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 		allMembers := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range allMembers {
+			// remove role only if has adventure role (meaning it also has other roles)
+			if !hasRole(lib.ADVENTURE_ROLE, v.Roles) {
+				continue
+			}
+
 			fmt.Printf("removing the role of %s \n", v.User.Username)
 
 			// remove all of the roles in here

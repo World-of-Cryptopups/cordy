@@ -2,6 +2,7 @@ package admin
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/TheBoringDude/minidis"
@@ -94,44 +95,62 @@ var ListUnverifiedCommand = &minidis.SlashCommandProps{
 			return c.Edit("You do not have permission to perform such actions!")
 		}
 
-		mems := chunkMembersArray(GetAllUnverifiedMembers(c.GuildId, c.Session))
+		mems := GetAllUnverifiedMembers(c.GuildId, c.Session)
 
-		embeds := []*discordgo.MessageEmbed{}
-		for _, x := range mems {
-			memsStr := ""
-
-			for _, v := range x {
-				memsStr += fmt.Sprintf("`%s`\n", v.User.Username)
-			}
-
-			embed := &discordgo.MessageEmbed{
-				Title: "List of Unverified Members",
-				Description: fmt.Sprintf(`The following are users/members that are verified in the server
-	
-	%s
-				`, memsStr),
-			}
-
-			embeds = append(embeds, embed)
+		strMems := []string{}
+		for _, v := range mems {
+			strMems = append(strMems, v.User.Username)
 		}
 
-		cEmbeds := chunkEmbeds(embeds)
+		parsedList := strings.Join(strMems, "\n")
 
-		for i, v := range cEmbeds {
-			if i == 0 {
-				c.EditC(minidis.EditProps{
-					Embeds: v,
-				})
+		return c.EditC(minidis.EditProps{
+			Content: "The following are users/members that are not yet verified in the server.",
+			Attachments: []*discordgo.File{
+				{
+					ContentType: "text/plain",
+					Name:        "unverified.txt",
+					Reader:      strings.NewReader(parsedList),
+				},
+			},
+		})
 
-				continue
-			}
+		// 	mems := chunkMembersArray(GetAllUnverifiedMembers(c.GuildId, c.Session))
 
-			c.FollowupC(minidis.FollowupProps{
-				Embeds: v,
-			})
-		}
+		// 	embeds := []*discordgo.MessageEmbed{}
+		// 	for _, x := range mems {
+		// 		memsStr := ""
 
-		return nil
+		// 		for _, v := range x {
+		// 			memsStr += fmt.Sprintf("`%s`\n", v.User.Username)
+		// 		}
+
+		// 		embed := &discordgo.MessageEmbed{
+		// 			Title: "List of Unverified Members",
+		// 			Description: fmt.Sprintf(`The following are users/members that are verified in the server
+
+		// %s
+		// 			`, memsStr),
+		// 		}
+
+		// 		embeds = append(embeds, embed)
+		// 	}
+
+		// 	for i, v := range embeds {
+		// 		if i == 0 {
+		// 			c.EditC(minidis.EditProps{
+		// 				Embeds: []*discordgo.MessageEmbed{v},
+		// 			})
+
+		// 			continue
+		// 		}
+
+		// 		c.FollowupC(minidis.FollowupProps{
+		// 			Embeds: []*discordgo.MessageEmbed{v},
+		// 		})
+		// 	}
+
+		// 	return nil
 
 	},
 }

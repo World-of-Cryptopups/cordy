@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/TheBoringDude/minidis"
@@ -32,6 +33,22 @@ func init() {
 	Bot.AddCommand(profileCommand)
 	Bot.AddCommand(dpsCommand)
 	Bot.AddCommand(helpCommand)
+	Bot.AddCommand(infoCommand)
+	Bot.AddCommand(&minidis.SlashCommandProps{
+		Name:        "hi",
+		Description: "hi",
+		Options: []*discordgo.ApplicationCommandOption{{
+			Name:        "member",
+			Description: "The member that you want to get the walelt info.",
+			Required:    true,
+			Type:        discordgo.ApplicationCommandOptionUser,
+		}},
+		Execute: func(c *minidis.SlashContext) error {
+			fmt.Println(c.Options)
+
+			return c.ReplyString("hello")
+		},
+	})
 	Bot.AddCommand(admin.ResetRolesCommand)
 	Bot.AddCommand(admin.ListUnverifiedCommand)
 	Bot.AddCommand(admin.KickUnverifiedCommand)

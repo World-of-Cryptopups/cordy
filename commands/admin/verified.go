@@ -46,3 +46,52 @@ var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 		})
 	},
 }
+
+var GetRoleWalletsCommand = &minidis.SlashCommandProps{
+	Name:        "get-role-wallets",
+	Description: "Get wallets of members that have role.",
+	Options: []*discordgo.ApplicationCommandOption{
+		{
+			Name:        "role",
+			Description: "Role of the members that you want to get",
+			Required:    true,
+			Type:        discordgo.ApplicationCommandOptionRole,
+		},
+	},
+	Execute: func(c *minidis.SlashContext) error {
+		c.DeferReply(false)
+
+		role := c.Options["role"].RoleValue(c.Session, c.GuildId)
+
+		roleMems := []*discordgo.Member{}
+		mems := GetAllMembers(c.GuildId, c.Session)
+
+		for _, v := range mems {
+			if hasRole(role.ID, v.Roles) {
+				roleMems = append(roleMems, v)
+			}
+		}
+
+		wallets := []string{}
+		for _, v := range roleMems {
+			user, exists := lib.GetUser(v.User.ID)
+			if !exists {
+				continue
+			}
+
+			wallets = append(wallets, user.Wallet)
+		}
+
+		return c.EditC(minidis.EditProps{
+			Content: fmt.Sprintf("Here are the wallets of the members that have role: **%s**", role.Name),
+			Attachments: []*discordgo.File{
+				{
+					ContentType: "text/plain",
+					Name:        fmt.Sprintf("%s-wallets.txt", role.Name),
+					Reader:      strings.NewReader(strings.Join(wallets, "\n")),
+				},
+			},
+		})
+
+	},
+}

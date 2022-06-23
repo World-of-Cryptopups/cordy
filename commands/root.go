@@ -53,6 +53,7 @@ func init() {
 	Bot.AddCommand(admin.ListUnverifiedCommand)
 	Bot.AddCommand(admin.KickUnverifiedCommand)
 	Bot.AddCommand(admin.GetVerifiedWalletsCommand)
+	Bot.AddCommand(admin.GetRoleWalletsCommand)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

@@ -21,6 +21,13 @@ func Start(session *discordgo.Session, guildId string) {
 		}
 
 		for _, v := range users {
+			_, err := session.GuildMember(guildId, v.ID)
+			if err != nil {
+				// user does not exist in guild / other problems
+				fmt.Printf("%s | err : %v\n", v.ID, err)
+				continue
+			}
+
 			data := dps.Calculate(v.Wallet)
 			totalDps := data.PuppyCards + data.PupSkinCards + data.PupItems.Real
 

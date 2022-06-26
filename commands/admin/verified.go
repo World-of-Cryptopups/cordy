@@ -26,18 +26,27 @@ var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 			return c.Edit("You do not have permission to perform such actions!")
 		}
 
-		users, err := lib.GetAllUser()
-		if err != nil {
-			return c.Edit("Failed to get all registered users / members.")
+		verifiedMems := []*discordgo.Member{}
+		users := GetAllMembers(c.GuildId, c.Session)
+
+		for _, v := range users {
+			if hasRole(lib.VERIFIED_ROLE, v.Roles) {
+				verifiedMems = append(verifiedMems, v)
+			}
 		}
 
 		wallets := []string{}
-		for _, v := range users {
-			wallets = append(wallets, v.Wallet)
+		for _, v := range verifiedMems {
+			user, exists := lib.GetUser(v.User.ID)
+			if !exists {
+				continue
+			}
+
+			wallets = append(wallets, user.Wallet)
 		}
 
 		return c.EditC(minidis.EditProps{
-			Content: fmt.Sprintf("Here are the wallets of the verified members / users...\n\nTotal registered members: %d \t", len(users)),
+			Content: fmt.Sprintf("Here are the wallets of the verified members / users...\n\nTotal members: %d \t", len(wallets)),
 			Attachments: []*discordgo.File{{
 				ContentType: "text/plain",
 				Name:        "wallets.txt",

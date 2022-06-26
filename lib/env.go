@@ -15,4 +15,5 @@ var (
 	ALL_ROLES      = append(InitRoles, ADVENTURE_ROLE)
 	MOD_ROLE       = os.Getenv("MOD_ROLE")
 	ADMIN_ROLE     = os.Getenv("ADMIN_ROLE")
+	VERIFIED_ROLE  = os.Getenv("VERIFIED_ROLE")
 )

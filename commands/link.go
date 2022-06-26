@@ -76,6 +76,15 @@ var linkCommand = &minidis.SlashCommandProps{
 		data := dps.Calculate(login.Wallet)
 		totalDps := data.PuppyCards + data.PupSkinCards + data.PupItems.Real
 
+		// add `Verified Pups` role
+		if err := c.Session.GuildMemberRoleAdd(c.GuildId, userid, lib.VERIFIED_ROLE); err != nil {
+			fmt.Println(err)
+
+			_, err := c.Followup("There was a problem trying to promote the user. If the problem persists please contact an admin.")
+			return err
+		}
+
+		// add pup roles
 		if err := lib.HandleRole(c.Session, userid, c.GuildId, totalDps); err != nil {
 			fmt.Println(err)
 

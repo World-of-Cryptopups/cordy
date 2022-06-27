@@ -30,7 +30,7 @@ var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 		users := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range users {
-			if hasRole(lib.VERIFIED_ROLE, v.Roles) {
+			if HasRole(lib.VERIFIED_ROLE, v.Roles) {
 				verifiedMems = append(verifiedMems, v)
 			}
 		}
@@ -76,7 +76,7 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 		mems := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range mems {
-			if hasRole(role.ID, v.Roles) {
+			if HasRole(role.ID, v.Roles) {
 				roleMems = append(roleMems, v)
 			}
 		}

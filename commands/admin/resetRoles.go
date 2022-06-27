@@ -63,7 +63,7 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 
 		for _, v := range allMembers {
 			// remove role only if has adventure role (meaning it also has other roles)
-			if !hasRole(lib.ADVENTURE_ROLE, v.Roles) {
+			if !HasRole(lib.ADVENTURE_ROLE, v.Roles) {
 				continue
 			}
 

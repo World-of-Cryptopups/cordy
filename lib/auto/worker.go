@@ -5,6 +5,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/World-of-Cryptopups/cordy/commands/admin"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
 	"github.com/bwmarrin/discordgo"
@@ -21,11 +22,16 @@ func Start(session *discordgo.Session, guildId string) {
 		}
 
 		for _, v := range users {
-			_, err := session.GuildMember(guildId, v.ID)
+			user, err := session.GuildMember(guildId, v.ID)
 			if err != nil {
 				// user does not exist in guild / other problems
 				fmt.Printf("%s | err : %v\n", v.ID, err)
 				continue
+			}
+
+			// add `Verified Pups` role if the user is registered but doesn't have it
+			if !admin.HasRole(lib.VERIFIED_ROLE, user.Roles) {
+				session.GuildMemberRoleAdd(guildId, user.User.ID, lib.VERIFIED_ROLE)
 			}
 
 			data := dps.Calculate(v.Wallet)

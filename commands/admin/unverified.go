@@ -10,7 +10,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func hasRole(r string, roles []string) bool {
+func HasRole(r string, roles []string) bool {
 	for _, v := range roles {
 		if r == v {
 			return true
@@ -27,11 +27,11 @@ func GetAllUnverifiedMembers(guildId string, session *discordgo.Session) []*disc
 
 	for _, v := range allMembers {
 		// pass if a mod or admin
-		if hasRole(lib.ADMIN_ROLE, v.Roles) || hasRole(lib.MOD_ROLE, v.Roles) {
+		if HasRole(lib.ADMIN_ROLE, v.Roles) || HasRole(lib.MOD_ROLE, v.Roles) {
 			continue
 		}
 
-		if !hasRole(lib.ADVENTURE_ROLE, v.Roles) {
+		if !HasRole(lib.ADVENTURE_ROLE, v.Roles) {
 			// do not kick if member only joined within a day
 			if time.Since(v.JoinedAt).Hours() < 24 {
 				continue

@@ -52,7 +52,7 @@ var helpCommand = &minidis.SlashCommandProps{
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "/link",
-					Value: "Link your wax wallet using your auth token from the website (https://www.worldofcryptopups.cf/my-collections)",
+					Value: "Link your wax wallet using your auth token from the website (https://www.worldofcryptopups.com/my-collections)",
 				},
 				{
 					Name:  "/profile",
@@ -62,6 +62,9 @@ var helpCommand = &minidis.SlashCommandProps{
 					Name:  "/dps",
 					Value: "Calculate and shows your DPS stats with your pup collections",
 				},
+			},
+			Image: &discordgo.MessageEmbedImage{
+				URL: "https://cdn.discordapp.com/attachments/880103250257399859/993917469364322484/Link.png",
 			},
 			Footer: &discordgo.MessageEmbedFooter{
 				Text: "© 2022 | World of Cryptopups",

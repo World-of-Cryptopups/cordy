@@ -34,11 +34,13 @@ func init() {
 	Bot.AddCommand(helpCommand)
 	Bot.AddCommand(infoCommand)
 
+	// admin commands in here
 	Bot.AddCommand(admin.ResetRolesCommand)
 	Bot.AddCommand(admin.ListUnverifiedCommand)
 	Bot.AddCommand(admin.KickUnverifiedCommand)
 	Bot.AddCommand(admin.GetVerifiedWalletsCommand)
 	Bot.AddCommand(admin.GetRoleWalletsCommand)
+	Bot.AddCommand(admin.ResetAccountCommand)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

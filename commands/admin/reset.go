@@ -6,7 +6,6 @@ import (
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/bwmarrin/discordgo"
-	"github.com/deta/deta-go/service/base"
 )
 
 var ResetAccountCommand = &minidis.SlashCommandProps{
@@ -41,25 +40,9 @@ var ResetAccountCommand = &minidis.SlashCommandProps{
 			return c.Edit("The user is currently not registered to me.")
 		}
 
-		usersBase := lib.UsersBase()
-		dpsBase := lib.UsersDpsBase()
-		loginsBase := lib.WebLoginBase()
-
-		// remove user from usersbase
-		if err = usersBase.Delete(user.ID); err != nil {
-			return c.Edit("Failed to remove user data from database." + fmt.Sprintf(" [user:%s]", user.ID))
-		}
-
-		// remove user's dps from dpsbase
-		if err = dpsBase.Delete(user.ID); err != nil {
-			return c.Edit("Failed to remove user's dps data from database." + fmt.Sprintf(" [user:%s]", user.ID))
-		}
-
-		// update linked bool in weblogin token basis
-		if err = loginsBase.Update(user.Wallet, base.Updates{
-			"linked": false,
-		}); err != nil {
-			return c.Edit("Failed to update user's web login data." + fmt.Sprintf(" [user:%s]", user.ID))
+		// remove the user from the databases
+		if err := lib.RemoveUser(user.ID, user.Wallet); err != nil {
+			return c.Edit(fmt.Sprintf("Error: %v", err))
 		}
 
 		return c.Edit(fmt.Sprintf("Successfully reset the linked account of **%s**", mentioned.String()))

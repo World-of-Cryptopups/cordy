@@ -26,6 +26,14 @@ func Start(session *discordgo.Session, guildId string) {
 			if err != nil {
 				// user does not exist in guild / other problems
 				fmt.Printf("%s | err : %v\n", v.ID, err)
+
+				// remove the user from the database
+				// - this is for the purpose to remove them from the /leaderboard page
+				//    if they left the server
+				if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
+					log.Printf("Error: %v\n", err)
+				}
+
 				continue
 			}
 

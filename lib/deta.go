@@ -1,6 +1,8 @@
 package lib
 
 import (
+	"fmt"
+
 	"github.com/deta/deta-go/deta"
 	"github.com/deta/deta-go/service/base"
 )
@@ -116,4 +118,31 @@ func UpdateUserDps(userid string, dps DPSProps) error {
 	)
 
 	return err
+}
+
+// removes the user from the databases
+func RemoveUser(userid string, wallet string) error {
+	usersBase := UsersBase()
+	dpsBase := UsersDpsBase()
+	loginsBase := WebLoginBase()
+
+	// remove id from registered users
+	if err := usersBase.Delete(userid); err != nil {
+		return fmt.Errorf("failed to remove user from database. (user: %s)", userid)
+	}
+
+	// remove data from the dps database
+	if err := dpsBase.Delete(userid); err != nil {
+		return fmt.Errorf("failed remove user's dps data from database. (user: %s)", userid)
+	}
+
+	// unlink discord id from wallet
+	if err := loginsBase.Update(wallet, base.Updates{
+		"linked": false,
+	}); err != nil {
+		return fmt.Errorf("failed to unlink discord userid from wax wallet. (wallet: %s)", wallet)
+	}
+
+	return nil
+
 }

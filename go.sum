@@ -8,10 +8,14 @@ github.com/TheBoringDude/minidis v0.0.0-20220610133528-c7d9c17cc601 h1:lRIY/XkFV
 github.com/TheBoringDude/minidis v0.0.0-20220610133528-c7d9c17cc601/go.mod h1:CzTbpIH9l12BgcQd/N/QIbSkBlkYok6HNn6qWdfSmPg=
 github.com/TheBoringDude/minidis v0.0.0-20220623031523-97a75649ae6a h1:5ik/I0jNkUAk5LVpuXD5s4XkXxGLkKtN2lJlzYdb+Kc=
 github.com/TheBoringDude/minidis v0.0.0-20220623031523-97a75649ae6a/go.mod h1:CzTbpIH9l12BgcQd/N/QIbSkBlkYok6HNn6qWdfSmPg=
+github.com/TheBoringDude/minidis v0.0.0-20220830075650-ef07d47a9792 h1:VSixt7J+KkF7Eo++990zmd5GSTd99ra6TXVzyVQ7oj0=
+github.com/TheBoringDude/minidis v0.0.0-20220830075650-ef07d47a9792/go.mod h1:aSkonxwfAj6Jtjk7eIIt+jRWy0FcNh5H7pDLF6/NKEw=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e h1:cavqZVJ3qubdTwucp9r/VEtUvUFoF3be1iswbN5x34k=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e/go.mod h1:1WgNjEIHtgk4jcA2pHNWcLHh0PjFdD2EJ71sDYher7c=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647 h1:j1YV+BBsPbJKdtt0zSXY79WjITv592e3MWgVWXpldsc=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647/go.mod h1:NJZpH+1AfhIcyQsPeuBKsUtYrRnjkyu0kIVMCHkZtRY=
+github.com/bwmarrin/discordgo v0.26.1 h1:AIrM+g3cl+iYBr4yBxCBp9tD9jR3K7upEjl0d89FRkE=
+github.com/bwmarrin/discordgo v0.26.1/go.mod h1:NJZpH+1AfhIcyQsPeuBKsUtYrRnjkyu0kIVMCHkZtRY=
 github.com/deta/deta-go v1.0.0 h1:vg94dg2t7ChYhs8DEn4oXLzLAGGafgCSClHfMYrVFvY=
 github.com/deta/deta-go v1.0.0/go.mod h1:vbQaUT8iD6xREm816eNp7Nw1aewd95dpcb/uj0T2vuY=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
@@ -27,6 +31,8 @@ golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e h1:T8NU3HyQ8ClP4SEE+KbFlg
 golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d h1:sK3txAijHtOK88l68nt020reeT1ZdKLIYetKl95FzVY=
 golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
+golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be h1:fmw3UbQh+nxngCAHrDCCztao/kbYFnWjoqop8dHx05A=
+golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/net v0.0.0-20210226172049-e18ecbb05110/go.mod h1:m0MpNAwzfU5UDzcl9v0D8zg8gWTRqZa9RBIspLL5mdg=
 golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a h1:dGzPydgVsqGcTRVwiLJ1jVbufYwmzD3LfVPLKsKg+0k=
@@ -35,6 +41,8 @@ golang.org/x/sys v0.0.0-20220608164250-635b8c9b7f68 h1:z8Hj/bl9cOV2grsOpEaQFUaly
 golang.org/x/sys v0.0.0-20220608164250-635b8c9b7f68/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20220622161953-175b2fd9d664 h1:wEZYwx+kK+KlZ0hpvP2Ls1Xr4+RWnlzGFwPP0aiDjIU=
 golang.org/x/sys v0.0.0-20220622161953-175b2fd9d664/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20220926163933-8cfa568d3c25 h1:nwzwVf0l2Y/lkov/+IYgMMbFyI+QypZDds9RxlSmsFQ=
+golang.org/x/sys v0.0.0-20220926163933-8cfa568d3c25/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=

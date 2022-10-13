@@ -7,6 +7,7 @@ import (
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
+	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -109,11 +110,15 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 				continue
 			}
 
-			totalDps := data.Dps.PuppyCards + data.Dps.PupSkinCards + data.Dps.PupItems.Real
-			userRole := lib.GetDPSRoleInfo(totalDps)
-			if userRole.RoleID != role.ID {
-				// if user's dps role is not the same with the role, ignore
-				continue
+			// check if role is in the dps roles
+			if utils.Includes(role.ID, lib.InitRoles) {
+				totalDps := data.Dps.PuppyCards + data.Dps.PupSkinCards + data.Dps.PupItems.Real
+				userRole := lib.GetDPSRoleInfo(totalDps)
+
+				if userRole.RoleID != role.ID {
+					// if user's dps role is not the same with the role, ignore
+					continue
+				}
 			}
 
 			// add wallet to the list of wallets to show

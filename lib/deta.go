@@ -120,6 +120,16 @@ func UpdateUserDps(userid string, dps DPSProps) error {
 	return err
 }
 
+// get the user's dpds
+func GetUserDps(userid string) (UserDpsProps, error) {
+	var dps UserDpsProps
+	dpsBase := UsersDpsBase()
+
+	err := dpsBase.Get(userid, &dps)
+
+	return dps, err
+}
+
 // removes the user from the databases
 func RemoveUser(userid string, wallet string) error {
 	usersBase := UsersBase()

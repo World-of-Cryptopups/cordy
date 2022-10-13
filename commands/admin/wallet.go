@@ -2,6 +2,7 @@ package admin
 
 import (
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/TheBoringDude/minidis"
@@ -88,6 +89,23 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 				continue
 			}
 
+			// filter each member with their dps
+			data, err := lib.GetUserDps(v.User.ID)
+			if err != nil {
+				log.Println(err) // observe some errors for now
+
+				// TODO: handle error in here
+				continue
+			}
+
+			totalDps := data.Dps.PuppyCards + data.Dps.PupSkinCards + data.Dps.PupItems.Real
+			userRole := lib.GetDPSRoleInfo(totalDps)
+			if userRole.RoleID != role.ID {
+				// if user's dps role is not the same with the role, ignore
+				continue
+			}
+
+			// add wallet to the list of wallets to show
 			wallets = append(wallets, user.Wallet)
 		}
 

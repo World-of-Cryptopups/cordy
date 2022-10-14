@@ -49,7 +49,7 @@ func Start(session *discordgo.Session, guildId string) {
 				log.Println(err)
 			}
 
-			if err = lib.UpdateUserDps(v.ID, data); err != nil {
+			if err = lib.UpdateUserDps(v.ID, data, v.Wallet); err != nil {
 				log.Println(err)
 			}
 

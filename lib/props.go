@@ -8,9 +8,10 @@ type User struct {
 }
 
 type UserDpsProps struct {
-	Key string   `json:"key"`
-	ID  string   `json:"id"`
-	Dps DPSProps `json:"dps"`
+	Key    string   `json:"key"`
+	ID     string   `json:"id"`
+	Dps    DPSProps `json:"dps"`
+	Wallet string   `json:"wallet"`
 }
 
 type WebLoginUserProps struct {

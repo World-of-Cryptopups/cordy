@@ -106,14 +106,15 @@ func GetAllUser() ([]User, error) {
 }
 
 // updates the user's dps
-func UpdateUserDps(userid string, dps DPSProps) error {
+func UpdateUserDps(userid string, dps DPSProps, wallet string) error {
 	dpsBase := UsersDpsBase()
 
 	_, err := dpsBase.Put(
 		UserDpsProps{
-			Key: userid,
-			ID:  userid,
-			Dps: dps,
+			Key:    userid,
+			ID:     userid,
+			Dps:    dps,
+			Wallet: wallet,
 		},
 	)
 

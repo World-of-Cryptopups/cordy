@@ -12,11 +12,11 @@ type DPSStats struct {
 
 const PupsWarrior = 3000
 const PupsKnight = 5000
-const PupsOverlord = 8000
-const PupsApocalypse = 10000
-const PupsAboveAll = 25000
-const PupsDoggosOfInfinity = 70000
-const PupsDoggosOfEternity = 145000
+const PupsOverlord = 10000
+const PupsApocalypse = 20000
+const PupsAboveAll = 35000
+const PupsDoggosOfInfinity = 60000
+const PupsDoggosOfEternity = 100000
 
 // Roles is the roles and
 var Roles = map[int]DPSStats{

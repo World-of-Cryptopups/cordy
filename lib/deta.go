@@ -85,6 +85,23 @@ func GetUser(userid string) (User, bool) {
 	return user, true
 }
 
+// fetch wallet
+func GetUserWallet(wallet string) ([]User, error) {
+	usersBase := UsersBase()
+
+	var queryResults []User
+
+	_, err := usersBase.Fetch(&base.FetchInput{
+		Q: base.Query{
+			{"wallet": wallet},
+		},
+		Dest:  &queryResults,
+		Limit: 1,
+	})
+
+	return queryResults, err
+}
+
 // gets all of the users in db
 func GetAllUser() ([]User, error) {
 	var users []User

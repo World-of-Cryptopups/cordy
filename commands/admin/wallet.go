@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
@@ -136,5 +137,89 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 			},
 		})
 
+	},
+}
+
+var FindWalletCommand = &minidis.SlashCommandProps{
+	Name:        "find-wallet",
+	Description: "Find the user with the linked wallet.",
+	Options: []*discordgo.ApplicationCommandOption{
+		{
+			Name:        "wallet",
+			Description: "Wax wallet to find",
+			Required:    true,
+			Type:        discordgo.ApplicationCommandOptionString,
+		},
+	},
+	Execute: func(c *minidis.SlashContext) error {
+		c.DeferReply(false)
+
+		// https://github.com/bwmarrin/discordgo/issues/1024
+		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
+		if err != nil {
+			_, err := c.Followup("There was a problem getting the user's permissions.")
+			return err
+		}
+		if perms&discordgo.PermissionAdministrator == 0 {
+			// not admin
+			return c.Edit("You do not have permission to perform such actions!")
+		}
+
+		wallet := c.Options["wallet"].StringValue()
+
+		query, err := lib.GetUserWallet(wallet)
+		if err != nil {
+			return c.Edit(fmt.Sprintf("There was a problem trying to find the wallet. Error: %v", err))
+		}
+
+		if len(query) == 0 {
+			// no users found with wallet
+			return c.Edit(fmt.Sprintf("No users found with wallet: **%s**", wallet))
+		}
+
+		// user exists
+		user := query[0]
+		discordUser, err := c.Session.GuildMember(c.GuildId, user.ID)
+		if err != nil {
+			return c.Edit(fmt.Sprintf("User with wallet found, ID: **%s**. But I cannot get his info in the server.", user.ID))
+		}
+
+		embed := &discordgo.MessageEmbed{
+			Author: &discordgo.MessageEmbedAuthor{
+				Name:    discordUser.User.Username,
+				IconURL: discordUser.AvatarURL(""),
+			},
+			Title: fmt.Sprintf("%s | %s", user.Wallet, discordUser.User.String()),
+			Thumbnail: &discordgo.MessageEmbedThumbnail{
+				URL: discordUser.AvatarURL(""),
+			},
+			Fields: []*discordgo.MessageEmbedField{
+				{
+					Name:  ":bust_in_silhouette: Username",
+					Value: discordUser.User.String(),
+				},
+				{
+					Name:   ":credit_card: Wallet",
+					Value:  user.Wallet,
+					Inline: true,
+				},
+				{
+					Name:   ":id: Discord ID",
+					Value:  user.ID,
+					Inline: true,
+				},
+			},
+			Timestamp: time.Now().Format(time.RFC3339),
+			Footer: &discordgo.MessageEmbedFooter{
+				Text: "2022 | World of Cryptopups",
+			},
+		}
+
+		return c.EditC(minidis.EditProps{
+			Content: "User found:",
+			Embeds: []*discordgo.MessageEmbed{
+				embed,
+			},
+		})
 	},
 }

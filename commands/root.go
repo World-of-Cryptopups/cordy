@@ -41,6 +41,7 @@ func init() {
 	Bot.AddCommand(admin.GetVerifiedWalletsCommand)
 	Bot.AddCommand(admin.GetRoleWalletsCommand)
 	Bot.AddCommand(admin.ResetAccountCommand)
+	Bot.AddCommand(admin.FindWalletCommand)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

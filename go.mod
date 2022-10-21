@@ -6,6 +6,7 @@ require github.com/TheBoringDude/minidis v0.0.0-20220830075650-ef07d47a9792
 
 require (
 	github.com/TheBoringDude/go-urljoin v0.0.1 // indirect
+	github.com/TheBoringDude/scuffed-go v0.0.1 // indirect
 	github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e // indirect
 	github.com/bwmarrin/discordgo v0.26.1 // indirect
 	github.com/deta/deta-go v1.0.0 // indirect

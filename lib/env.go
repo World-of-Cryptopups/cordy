@@ -6,9 +6,10 @@ import (
 )
 
 var (
-	GUILD = strings.Split(os.Getenv("GUILD"), ",")
-	TOKEN = os.Getenv("TOKEN")
-	DEV   = os.Getenv("DEV") == "true"
+	GUILD      = strings.Split(os.Getenv("GUILD"), ",")
+	TOKEN      = os.Getenv("TOKEN")
+	DEV        = os.Getenv("DEV") == "true"
+	IS_TESTNET = os.Getenv("IS_TESTNET") == "true"
 
 	ADVENTURE_ROLE = os.Getenv("ADVENTURE_ROLE")
 	InitRoles      = strings.Split(os.Getenv("ROLES"), ",")
@@ -16,4 +17,5 @@ var (
 	MOD_ROLE       = os.Getenv("MOD_ROLE")
 	ADMIN_ROLE     = os.Getenv("ADMIN_ROLE")
 	VERIFIED_ROLE  = os.Getenv("VERIFIED_ROLE")
+	WHITELIST_API  = os.Getenv("GALLERY_WHITELIST_API")
 )

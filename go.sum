@@ -10,6 +10,8 @@ github.com/TheBoringDude/minidis v0.0.0-20220623031523-97a75649ae6a h1:5ik/I0jNk
 github.com/TheBoringDude/minidis v0.0.0-20220623031523-97a75649ae6a/go.mod h1:CzTbpIH9l12BgcQd/N/QIbSkBlkYok6HNn6qWdfSmPg=
 github.com/TheBoringDude/minidis v0.0.0-20220830075650-ef07d47a9792 h1:VSixt7J+KkF7Eo++990zmd5GSTd99ra6TXVzyVQ7oj0=
 github.com/TheBoringDude/minidis v0.0.0-20220830075650-ef07d47a9792/go.mod h1:aSkonxwfAj6Jtjk7eIIt+jRWy0FcNh5H7pDLF6/NKEw=
+github.com/TheBoringDude/scuffed-go v0.0.1 h1:17lc8euBZJfJyyE58bfeqS+4WolviSiQx2Pa4V1Ewvg=
+github.com/TheBoringDude/scuffed-go v0.0.1/go.mod h1:I6Qja0PfdRxOb82yoe7djCA43B4+Ws2dfQ/Yvxo25DM=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e h1:cavqZVJ3qubdTwucp9r/VEtUvUFoF3be1iswbN5x34k=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e/go.mod h1:1WgNjEIHtgk4jcA2pHNWcLHh0PjFdD2EJ71sDYher7c=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647 h1:j1YV+BBsPbJKdtt0zSXY79WjITv592e3MWgVWXpldsc=

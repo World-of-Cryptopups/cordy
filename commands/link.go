@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
@@ -91,6 +92,13 @@ var linkCommand = &minidis.SlashCommandProps{
 			_, err := c.Followup("There was a problem trying to promote the user. If the problem persists please contact an admin.")
 			return err
 		}
+
+		transaction_id, err := lib.AddWhitelist(login.Wallet)
+		if err != nil {
+			log.Println(err)
+			// TODO: report this problem to admins
+		}
+		log.Printf("Whitelist Transaction: %s\n", transaction_id)
 
 		return c.Edit("Successfully linked your wallet with your User ID. You can now check you DPS stats with `/dps` command and your role will be updated.")
 	},

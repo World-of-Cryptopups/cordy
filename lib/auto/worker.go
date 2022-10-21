@@ -8,6 +8,7 @@ import (
 	"github.com/World-of-Cryptopups/cordy/commands/admin"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
+	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -15,6 +16,12 @@ import (
 func Start(session *discordgo.Session, guildId string) {
 	for {
 		fmt.Println("- starting worker -")
+
+		blacklists, err := lib.GetBlacklists()
+		if err != nil {
+			// TODO: improve error hanlding in here
+			log.Println(err)
+		}
 
 		users, err := lib.GetAllUser()
 		if err != nil {
@@ -30,6 +37,18 @@ func Start(session *discordgo.Session, guildId string) {
 				// remove the user from the database
 				// - this is for the purpose to remove them from the /leaderboard page
 				//    if they left the server
+				if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
+					log.Printf("Error: %v\n", err)
+				}
+
+				continue
+			}
+
+			// check if they are blacklisted
+			if utils.Includes(v.Wallet, blacklists) {
+				fmt.Printf("Wallet is blacklisted: %s | .. Removing it from db\n", v.Wallet)
+
+				// if wallet is blacklisted, remove from db
 				if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
 					log.Printf("Error: %v\n", err)
 				}

@@ -14,6 +14,10 @@ github.com/TheBoringDude/scuffed-go v0.0.1 h1:17lc8euBZJfJyyE58bfeqS+4WolviSiQx2
 github.com/TheBoringDude/scuffed-go v0.0.1/go.mod h1:I6Qja0PfdRxOb82yoe7djCA43B4+Ws2dfQ/Yvxo25DM=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e h1:cavqZVJ3qubdTwucp9r/VEtUvUFoF3be1iswbN5x34k=
 github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e/go.mod h1:1WgNjEIHtgk4jcA2pHNWcLHh0PjFdD2EJ71sDYher7c=
+github.com/World-of-Cryptopups/eosrpc.go v0.0.1 h1:DeAd+SpgOHB9pnJol2jNyn5Kovcig5J2UA/GQmGqNKk=
+github.com/World-of-Cryptopups/eosrpc.go v0.0.1/go.mod h1:LVNwgFd/7SOzAydL2PcoIfRUGwMx/DII1TZv/mosZa8=
+github.com/World-of-Cryptopups/eosrpc.go v0.0.2-0.20221021135047-4471f9533536 h1:UPBqXneaSztG6VZCgG2GHC8UBu3RsyOCAemPYqCWyJM=
+github.com/World-of-Cryptopups/eosrpc.go v0.0.2-0.20221021135047-4471f9533536/go.mod h1:LVNwgFd/7SOzAydL2PcoIfRUGwMx/DII1TZv/mosZa8=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647 h1:j1YV+BBsPbJKdtt0zSXY79WjITv592e3MWgVWXpldsc=
 github.com/bwmarrin/discordgo v0.25.1-0.20220523182309-414e505c5647/go.mod h1:NJZpH+1AfhIcyQsPeuBKsUtYrRnjkyu0kIVMCHkZtRY=
 github.com/bwmarrin/discordgo v0.26.1 h1:AIrM+g3cl+iYBr4yBxCBp9tD9jR3K7upEjl0d89FRkE=

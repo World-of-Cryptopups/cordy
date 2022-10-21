@@ -8,6 +8,7 @@ require (
 	github.com/TheBoringDude/go-urljoin v0.0.1 // indirect
 	github.com/TheBoringDude/scuffed-go v0.0.1 // indirect
 	github.com/World-of-Cryptopups/atomicassets-go v0.0.0-20220323074558-918cf916152e // indirect
+	github.com/World-of-Cryptopups/eosrpc.go v0.0.2-0.20221021135047-4471f9533536 // indirect
 	github.com/bwmarrin/discordgo v0.26.1 // indirect
 	github.com/deta/deta-go v1.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect

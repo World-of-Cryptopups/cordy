@@ -7,6 +7,7 @@ import (
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
+	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
 	"github.com/deta/deta-go/service/base"
 )
@@ -46,6 +47,16 @@ var linkCommand = &minidis.SlashCommandProps{
 		// check if token has been used already
 		if login.Linked {
 			return c.Edit("Token has already been used. If there was a mistake, please contact an admin. Thank you~")
+		}
+
+		blacklistedWallets, err := lib.GetBlacklists()
+		if err != nil {
+			return c.Edit("Failed to check if wallet is blacklisted or not. Please contract an admin to fix the issue.")
+		}
+
+		// check if wallet is blacklisted
+		if utils.Includes(login.Wallet, blacklistedWallets) {
+			return c.Edit("Your wallet is currently blacklisted. If this was a mistake please report to the admins to fix this issue.")
 		}
 
 		usersBase := lib.UsersBase()

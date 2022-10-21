@@ -4,8 +4,8 @@
 WantedBy=multi-user.target
 
 [Service]
-ExecStart=/home/ubuntu/cordy/cordy
-WorkingDirectory=/home/ubuntu/cordy
+ExecStart=/root/cordy/cordy
+WorkingDirectory=/root/cordy
 User=ubuntu
 Restart=always
 RestartSec=5

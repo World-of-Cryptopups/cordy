@@ -12,11 +12,12 @@ func FetchAllAssets(wallet string, schema string) []atomicassets.AssetsDataProps
 	page := 1
 	for {
 		q, err := lib.Atom.GetAssets(&atomicassets.GetAssetsQuery{
-			CollectionName: "cryptopuppie",
-			Limit:          1000,
-			Owner:          wallet,
-			SchemaName:     schema,
-			Page:           page,
+			CollectionName:    "cryptopuppie",
+			Limit:             1000,
+			Owner:             wallet,
+			SchemaName:        schema,
+			Page:              page,
+			TemplateBlacklist: []string{"613110", "612990"}, // ignore the woof coins
 		})
 
 		if err != nil {

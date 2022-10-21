@@ -6,9 +6,6 @@ WantedBy=multi-user.target
 [Service]
 ExecStart=/root/cordy/cordy
 WorkingDirectory=/root/cordy
-User=ubuntu
+User=root
 Restart=always
 RestartSec=5
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=%n

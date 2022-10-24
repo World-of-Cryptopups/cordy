@@ -48,7 +48,7 @@ func Start(session *discordgo.Session, guildId string) {
 				// remove the user from the database
 				// - this is for the purpose to remove them from the /leaderboard page
 				//    if they left the server
-				if err = lib.UpdateUser(v.ID, v.Wallet); err != nil {
+				if err = lib.StopUser(v.ID, v.Wallet); err != nil {
 					log.Printf("Error: %v\n", err)
 				}
 
@@ -68,7 +68,7 @@ func Start(session *discordgo.Session, guildId string) {
 				})
 
 				// if wallet is blacklisted, remove from db
-				if err = lib.UpdateUser(v.ID, v.Wallet); err != nil {
+				if err = lib.StopUser(v.ID, v.Wallet); err != nil {
 					log.Printf("Error: %v\n", err)
 				}
 
@@ -105,7 +105,7 @@ func Start(session *discordgo.Session, guildId string) {
 		// send log
 		lib.SendLog(&lib.LogProps{
 			Type:        lib.LogTypeInfo,
-			Title:       "Auto DPS Worker",
+			Title:       "Auto DPS",
 			Description: "Auto DPS worker is done for this round",
 			Message:     fmt.Sprintf("Total updated wallets: **%d**", updatedWallets),
 		})

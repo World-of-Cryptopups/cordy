@@ -158,11 +158,10 @@ func GetUserDps(userid string) (UserDpsProps, error) {
 	return dps, err
 }
 
-// removes the user from the databases
-func UpdateUser(userid string, wallet string) error {
+// update the user's data from database
+func StopUser(userid string, wallet string) error {
 	usersBase := UsersBase()
 	dpsBase := UsersDpsBase()
-	loginsBase := WebLoginBase()
 
 	// remove id from registered users
 	if err := usersBase.Update(userid, base.Updates{
@@ -194,18 +193,31 @@ func UpdateUser(userid string, wallet string) error {
 		return fmt.Errorf("failed to update user's dps data from database. (user: %s)", userid)
 	}
 
+	// do not unlink token, since user's data is only stopped
+
+	return nil
+}
+
+// removes the user from the databases
+func RemoveUser(userid string, wallet string) error {
+	usersBase := UsersBase()
+	dpsBase := UsersDpsBase()
+	loginsBase := WebLoginBase()
+
+	// remove id from registered users
+	if err := usersBase.Delete(userid); err != nil {
+		return fmt.Errorf("failed to remove user from database. (user: %s)", userid)
+	}
+
+	// remove data from the dps database
+	if err := dpsBase.Delete(userid); err != nil {
+		return fmt.Errorf("failed remove user's dps data from database. (user: %s)", userid)
+	}
+
 	// unlink discord id from wallet
 	if err := loginsBase.Update(wallet, base.Updates{
 		"linked": false,
 	}); err != nil {
-		// sendlog
-		SendLog(&LogProps{
-			Type:        LogTypeError,
-			Title:       "Failed to unlink user's token",
-			Description: fmt.Sprintf("Error in trying to unlink the user's token in the database. Wallet: **`%s`**", wallet),
-			Message:     "Trying to update the `linked` key in database for user but failed.",
-		})
-
 		return fmt.Errorf("failed to unlink discord userid from wax wallet. (wallet: %s)", wallet)
 	}
 

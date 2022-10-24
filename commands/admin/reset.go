@@ -41,7 +41,7 @@ var ResetAccountCommand = &minidis.SlashCommandProps{
 		}
 
 		// remove the user from the databases
-		if err := lib.UpdateUser(user.ID, user.Wallet); err != nil {
+		if err := lib.RemoveUser(user.ID, user.Wallet); err != nil {
 			return c.Edit(fmt.Sprintf("Error: %v", err))
 		}
 

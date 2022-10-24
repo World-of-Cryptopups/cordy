@@ -34,15 +34,17 @@ func Start(session *discordgo.Session, guildId string) {
 		for _, v := range users {
 			user, err := session.GuildMember(guildId, v.ID)
 			if err != nil {
+				// TODO:: need to parse and check error type in here
+
 				// user does not exist in guild / other problems
 				fmt.Printf("%s | err : %v\n", v.ID, err)
 
 				// send log
 				lib.SendLog(&lib.LogProps{
 					Type:        lib.LogTypeInfo,
-					Title:       "User does not exist in server",
-					Description: "User's data has stopped updating",
-					Message:     fmt.Sprintf("The following user: **`%s`** has left the server and his data will be stopped to update.", v.ID),
+					Title:       "User Get Failed",
+					Description: fmt.Sprintf("Failed to get user: **`%s`** and has stopped to update dps, I will try again later.", v.ID),
+					Message:     fmt.Sprintf("`%v`", err),
 				})
 
 				// remove the user from the database

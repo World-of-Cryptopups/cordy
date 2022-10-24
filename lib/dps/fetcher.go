@@ -1,6 +1,9 @@
 package dps
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/World-of-Cryptopups/atomicassets-go"
 	"github.com/World-of-Cryptopups/cordy/lib"
 )
@@ -21,7 +24,18 @@ func FetchAllAssets(wallet string, schema string) []atomicassets.AssetsDataProps
 		})
 
 		if err != nil {
-			lib.LogError(err)
+			log.Println(err)
+
+			// send log
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Error Fetching Assets",
+				Description: fmt.Sprintf("Failed in fetching the user's assets to calculate the dps, wallet: %s", wallet),
+				Message:     fmt.Sprintf("`%v`", err),
+			})
+
+			// try to redo
+			return FetchAllAssets(wallet, schema)
 		}
 
 		allData = append(allData, q.Data...)

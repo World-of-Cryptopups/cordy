@@ -1,17 +1,19 @@
 package lib
 
 type User struct {
-	Key    string `json:"key"`
-	ID     string `json:"id"`
-	Wallet string `json:"wallet"`
-	Token  string `json:"token"`
+	Key       string `json:"key"`
+	ID        string `json:"id"`
+	Wallet    string `json:"wallet"`
+	Token     string `json:"token"`
+	IsStopped bool   `json:"is_stopped"`
 }
 
 type UserDpsProps struct {
-	Key    string   `json:"key"`
-	ID     string   `json:"id"`
-	Dps    DPSProps `json:"dps"`
-	Wallet string   `json:"wallet"`
+	Key       string   `json:"key"`
+	ID        string   `json:"id"`
+	Dps       DPSProps `json:"dps"`
+	Wallet    string   `json:"wallet"`
+	IsStopped bool     `json:"is_stopped"`
 }
 
 type WebLoginUserProps struct {

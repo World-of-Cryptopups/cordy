@@ -104,12 +104,27 @@ var linkCommand = &minidis.SlashCommandProps{
 			return err
 		}
 
-		transaction_id, err := lib.AddWhitelist(login.Wallet)
+		transaction, err := lib.AddWhitelist(login.Wallet)
 		if err != nil {
+			// send log
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Whitelist Failed",
+				Description: fmt.Sprintf("Error in whitelisting user: **%s** with wallet: **`%s`**", c.Author.String(), login.Wallet),
+				Message:     fmt.Sprintf("`%v`", err),
+			})
+
 			log.Println(err)
-			// TODO: report this problem to admins
 		}
-		log.Printf("Whitelist Transaction: %s\n", transaction_id)
+		log.Printf("Whitelist Transaction: %s\n", transaction)
+
+		// send log of new user
+		lib.SendLog(&lib.LogProps{
+			Type:        lib.LogTypeInfo,
+			Title:       "New user registered",
+			Description: fmt.Sprintf("User: **%s** has registered", c.Author.String()),
+			Message:     fmt.Sprintf("User has registered and has been whitelisted, check the transaction: **`%s`**", transaction.TransactionId),
+		})
 
 		return c.Edit("Successfully linked your wallet with your User ID. You can now check you DPS stats with `/dps` command and your role will be updated.")
 	},

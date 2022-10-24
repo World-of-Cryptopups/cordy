@@ -122,16 +122,26 @@ func GetAllUser() ([]User, error) {
 	return users, nil
 }
 
+// update the main user's data
+func UpdateUserData(userid string) error {
+	usersBase := UsersBase()
+
+	return usersBase.Update(userid, base.Updates{
+		"is_stopped": false,
+	})
+}
+
 // updates the user's dps
 func UpdateUserDps(userid string, dps DPSProps, wallet string) error {
 	dpsBase := UsersDpsBase()
 
 	_, err := dpsBase.Put(
 		UserDpsProps{
-			Key:    userid,
-			ID:     userid,
-			Dps:    dps,
-			Wallet: wallet,
+			Key:       userid,
+			ID:        userid,
+			Dps:       dps,
+			Wallet:    wallet,
+			IsStopped: false,
 		},
 	)
 
@@ -149,25 +159,53 @@ func GetUserDps(userid string) (UserDpsProps, error) {
 }
 
 // removes the user from the databases
-func RemoveUser(userid string, wallet string) error {
+func UpdateUser(userid string, wallet string) error {
 	usersBase := UsersBase()
 	dpsBase := UsersDpsBase()
 	loginsBase := WebLoginBase()
 
 	// remove id from registered users
-	if err := usersBase.Delete(userid); err != nil {
-		return fmt.Errorf("failed to remove user from database. (user: %s)", userid)
+	if err := usersBase.Update(userid, base.Updates{
+		"is_stopped": true,
+	}); err != nil {
+		// sendlog
+		SendLog(&LogProps{
+			Type:        LogTypeError,
+			Title:       "Failed to update user",
+			Description: fmt.Sprintf("Error in updating the user's (**`%s`**) data in the database. Please update it manually.", userid),
+			Message:     "Trying to update `is_stopped` key in database for user but failed.",
+		})
+
+		return fmt.Errorf("failed to update user from database. (user: %s)", userid)
 	}
 
 	// remove data from the dps database
-	if err := dpsBase.Delete(userid); err != nil {
-		return fmt.Errorf("failed remove user's dps data from database. (user: %s)", userid)
+	if err := dpsBase.Update(userid, base.Updates{
+		"is_stopped": true,
+	}); err != nil {
+		// sendlog
+		SendLog(&LogProps{
+			Type:        LogTypeError,
+			Title:       "Failed to update user's dps data",
+			Description: fmt.Sprintf("Error in update the user's (**`%s`**) dps data in the database. Please update it manually.", userid),
+			Message:     "Trying to update `is_stopped` key in database for user but failed.",
+		})
+
+		return fmt.Errorf("failed to update user's dps data from database. (user: %s)", userid)
 	}
 
 	// unlink discord id from wallet
 	if err := loginsBase.Update(wallet, base.Updates{
 		"linked": false,
 	}); err != nil {
+		// sendlog
+		SendLog(&LogProps{
+			Type:        LogTypeError,
+			Title:       "Failed to unlink user's token",
+			Description: fmt.Sprintf("Error in trying to unlink the user's token in the database. Wallet: **`%s`**", wallet),
+			Message:     "Trying to update the `linked` key in database for user but failed.",
+		})
+
 		return fmt.Errorf("failed to unlink discord userid from wax wallet. (wallet: %s)", wallet)
 	}
 

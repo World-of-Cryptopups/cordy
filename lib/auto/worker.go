@@ -104,13 +104,7 @@ func Start(session *discordgo.Session, guildId string) {
 			fmt.Println(v)
 		}
 
-		// send log
-		lib.SendLog(&lib.LogProps{
-			Type:        lib.LogTypeInfo,
-			Title:       "Auto DPS",
-			Description: "Auto DPS worker is done for this round",
-			Message:     fmt.Sprintf("Total updated wallets: **%d**", updatedWallets),
-		})
+		fmt.Printf("-------------------------------------------------------------\nAuto DPS worker is done, Total Wallets: %d\n-------------------------------------------------------------\n", updatedWallets)
 
 		// sleep for 1 minute
 		time.Sleep(time.Duration(1) * time.Minute)

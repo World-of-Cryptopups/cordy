@@ -18,8 +18,9 @@ func GetAccountStats(wallet string) atomicassets.AccountCollectionDataProps {
 }
 
 var profileCommand = &minidis.SlashCommandProps{
-	Name:        "profile",
-	Description: "Show your user profile",
+	Name:                     "profile",
+	Description:              "Show your user profile",
+	DefaultMemberPermissions: 1 << 31,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
 

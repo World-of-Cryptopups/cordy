@@ -19,19 +19,9 @@ var ResetAccountCommand = &minidis.SlashCommandProps{
 			Required:    true,
 		},
 	},
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
-
-		// https://github.com/bwmarrin/discordgo/issues/1024
-		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
-		if err != nil {
-			_, err := c.Followup("There was a problem getting the user's permissions.")
-			return err
-		}
-		if perms&discordgo.PermissionAdministrator == 0 {
-			// not admin
-			return c.Edit("You do not have permission to perform such actions!")
-		}
 
 		mentioned := c.Options["user"].UserValue(c.Session)
 

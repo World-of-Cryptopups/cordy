@@ -23,6 +23,7 @@ var linkCommand = &minidis.SlashCommandProps{
 			Required:    true,
 		},
 	},
+	DefaultMemberPermissions: 1 << 31,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(true)
 

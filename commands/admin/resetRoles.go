@@ -8,10 +8,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func CheckPermission() {
-
-}
-
 func GetAllMembers(guildId string, s *discordgo.Session) []*discordgo.Member {
 	lastId := "0"
 	allMembers := []*discordgo.Member{}
@@ -43,21 +39,11 @@ func GetAllMembers(guildId string, s *discordgo.Session) []*discordgo.Member {
 }
 
 var ResetRolesCommand = &minidis.SlashCommandProps{
-	Name:        "reset-roles",
-	Description: "Reset the roles of all members in the server",
+	Name:                     "reset-roles",
+	Description:              "Reset the roles of all members in the server",
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
-
-		// https://github.com/bwmarrin/discordgo/issues/1024
-		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
-		if err != nil {
-			_, err := c.Followup("There was a problem getting the user's permissions.")
-			return err
-		}
-		if perms&discordgo.PermissionAdministrator == 0 {
-			// not admin
-			return c.Edit("You do not have permission to perform such actions!")
-		}
 
 		allMembers := GetAllMembers(c.GuildId, c.Session)
 
@@ -71,7 +57,7 @@ var ResetRolesCommand = &minidis.SlashCommandProps{
 
 			// remove all of the roles in here
 			for _, r := range lib.ALL_ROLES {
-				if err = c.Session.GuildMemberRoleRemove(c.GuildId, v.User.ID, r); err != nil {
+				if err := c.Session.GuildMemberRoleRemove(c.GuildId, v.User.ID, r); err != nil {
 					fmt.Printf("Failed to remove the role of %s, error: %v\n", v.User.Username, err)
 
 					// _, e := c.Followup(fmt.Sprintf("Failed to reset the role of %s", v.User.Username))

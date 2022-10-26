@@ -11,8 +11,9 @@ import (
 )
 
 var dpsCommand = &minidis.SlashCommandProps{
-	Name:        "dps",
-	Description: "Check your pup collection dps stats",
+	Name:                     "dps",
+	Description:              "Check your pup collection dps stats",
+	DefaultMemberPermissions: 1 << 31,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
 

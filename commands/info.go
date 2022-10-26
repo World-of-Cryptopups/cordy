@@ -20,6 +20,7 @@ var infoCommand = &minidis.SlashCommandProps{
 			Type:        discordgo.ApplicationCommandOptionUser,
 		},
 	},
+	DefaultMemberPermissions: 1 << 31,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
 

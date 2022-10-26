@@ -22,8 +22,9 @@ var dpsBtn = &minidis.ComponentInteractionProps{
 }
 
 var helpCommand = &minidis.SlashCommandProps{
-	Name:        "help",
-	Description: "Show help message for the bot",
+	Name:                     "help",
+	Description:              "Show help message for the bot",
+	DefaultMemberPermissions: 1 << 31,
 	Execute: func(c *minidis.SlashContext) error {
 		components := []discordgo.MessageComponent{
 			discordgo.ActionsRow{

@@ -13,8 +13,9 @@ import (
 )
 
 var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
-	Name:        "get-verified-wallets",
-	Description: "Gets the wallets of the verified users.",
+	Name:                     "get-verified-wallets",
+	Description:              "Gets the wallets of the verified users.",
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
 
@@ -60,8 +61,9 @@ var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 }
 
 var GetRoleWalletsCommand = &minidis.SlashCommandProps{
-	Name:        "get-role-wallets",
-	Description: "Get wallets of members that have role.",
+	Name:                     "get-role-wallets",
+	Description:              "Get wallets of members that have role.",
+	DefaultMemberPermissions: 0,
 	Options: []*discordgo.ApplicationCommandOption{
 		{
 			Name:        "role",
@@ -151,19 +153,9 @@ var FindWalletCommand = &minidis.SlashCommandProps{
 			Type:        discordgo.ApplicationCommandOptionString,
 		},
 	},
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
-
-		// https://github.com/bwmarrin/discordgo/issues/1024
-		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
-		if err != nil {
-			_, err := c.Followup("There was a problem getting the user's permissions.")
-			return err
-		}
-		if perms&discordgo.PermissionAdministrator == 0 {
-			// not admin
-			return c.Edit("You do not have permission to perform such actions!")
-		}
 
 		wallet := c.Options["wallet"].StringValue()
 

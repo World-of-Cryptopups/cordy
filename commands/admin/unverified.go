@@ -45,21 +45,11 @@ func GetAllUnverifiedMembers(guildId string, session *discordgo.Session) []*disc
 }
 
 var ListUnverifiedCommand = &minidis.SlashCommandProps{
-	Name:        "list-unverified",
-	Description: "Lists the users in the server that are not verified",
+	Name:                     "list-unverified",
+	Description:              "Lists the users in the server that are not verified",
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
-
-		// https://github.com/bwmarrin/discordgo/issues/1024
-		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
-		if err != nil {
-			_, err := c.Followup("There was a problem getting the user's permissions.")
-			return err
-		}
-		if perms&discordgo.PermissionAdministrator == 0 {
-			// not admin
-			return c.Edit("You do not have permission to perform such actions!")
-		}
 
 		mems := GetAllUnverifiedMembers(c.GuildId, c.Session)
 
@@ -85,21 +75,11 @@ var ListUnverifiedCommand = &minidis.SlashCommandProps{
 }
 
 var KickUnverifiedCommand = &minidis.SlashCommandProps{
-	Name:        "kick-unverified",
-	Description: "Kick the users that are not verified in the server",
+	Name:                     "kick-unverified",
+	Description:              "Kick the users that are not verified in the server",
+	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
-
-		// https://github.com/bwmarrin/discordgo/issues/1024
-		perms, err := c.Session.UserChannelPermissions(c.Author.ID, c.ChannelId)
-		if err != nil {
-			_, err := c.Followup("There was a problem getting the user's permissions.")
-			return err
-		}
-		if perms&discordgo.PermissionAdministrator == 0 {
-			// not admin
-			return c.Edit("You do not have permission to perform such actions!")
-		}
 
 		mems := GetAllUnverifiedMembers(c.GuildId, c.Session)
 		for _, v := range mems {

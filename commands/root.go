@@ -42,6 +42,7 @@ func init() {
 	Bot.AddCommand(admin.GetRoleWalletsCommand)
 	Bot.AddCommand(admin.ResetAccountCommand)
 	Bot.AddCommand(admin.FindWalletCommand)
+	Bot.AddCommand(admin.ListUnreg)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

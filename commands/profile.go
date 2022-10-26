@@ -12,7 +12,20 @@ import (
 
 func GetAccountStats(wallet string) atomicassets.AccountCollectionDataProps {
 	q, err := lib.Atom.GetAccountCollection(wallet, "cryptopuppie")
-	lib.LogError(err)
+
+	if err != nil {
+		fmt.Printf("Error fetching wallet stats: %s .. Retrying..\n", wallet)
+
+		// send log
+		lib.SendLog(&lib.LogProps{
+			Type:        lib.LogTypeError,
+			Title:       "Error Fetching Wallet stats",
+			Description: fmt.Sprintf("There was a problem in fetching the account/wallet's stats: **`%s`**", wallet),
+			Message:     fmt.Sprintf("`%v`", err),
+		})
+
+		return GetAccountStats(wallet)
+	}
 
 	return q.Data
 }

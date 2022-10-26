@@ -2,6 +2,7 @@ package admin
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
@@ -17,7 +18,8 @@ func GetAllMembers(guildId string, s *discordgo.Session) []*discordgo.Member {
 	for {
 		mems, err := s.GuildMembers(guildId, lastId, 1000)
 		if err != nil {
-			lib.LogError(err)
+			fmt.Println("Err! Failed to get all members in server")
+			log.Fatalln(err)
 		}
 
 		if len(mems) == 0 {

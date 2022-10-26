@@ -52,11 +52,19 @@ var linkCommand = &minidis.SlashCommandProps{
 
 		blacklistedWallets, err := lib.GetBlacklists()
 		if err != nil {
-			return c.Edit("Failed to check if wallet is blacklisted or not. Please contract an admin to fix the issue.")
+			return c.Edit("Failed to check if wallet is blacklisted or not. Please contact an admin to fix the issue.")
 		}
 
 		// check if wallet is blacklisted
 		if utils.Includes(login.Wallet, blacklistedWallets) {
+			// send log
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Linked blacklist",
+				Description: fmt.Sprintf("User **`%s`** has tried to link a blacklisted wallet: **`%s`**", c.Author.String(), login.Wallet),
+				Message:     "(none)",
+			})
+
 			return c.Edit("Your wallet is currently blacklisted. If this was a mistake please report to the admins to fix this issue.")
 		}
 
@@ -80,8 +88,6 @@ var linkCommand = &minidis.SlashCommandProps{
 
 		// update web login info
 		if _, err := usersBase.Put(newUser); err != nil {
-			lib.PrintError(err)
-
 			_, err = c.Followup("There was a problem trying to link your wallet, if the problem persists, please contact an admin.")
 			return err
 		}

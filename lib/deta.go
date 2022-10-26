@@ -2,6 +2,7 @@ package lib
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/deta/deta-go/deta"
 	"github.com/deta/deta-go/service/base"
@@ -10,7 +11,9 @@ import (
 // create new deta instance
 func Deta() *deta.Deta {
 	d, err := deta.New()
-	LogError(err)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	return d
 }
@@ -20,7 +23,9 @@ func UsersBase() *base.Base {
 	d := Deta()
 
 	base, err := base.New(d, "Users")
-	LogError(err)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	return base
 }
@@ -30,7 +35,9 @@ func UsersDpsBase() *base.Base {
 	d := Deta()
 
 	base, err := base.New(d, "DpsDB")
-	LogError(err)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	return base
 }
@@ -40,7 +47,9 @@ func WebLoginBase() *base.Base {
 	d := Deta()
 
 	base, err := base.New(d, "WebLogin")
-	LogError(err)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	return base
 }
@@ -59,7 +68,9 @@ func FetchWebLoginToken(token string) WebLoginUserProps {
 			Limit: 1,
 		},
 	)
-	LogError(err)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	if len(login) == 0 {
 		return WebLoginUserProps{}
@@ -79,7 +90,7 @@ func GetUser(userid string) (User, bool) {
 			return user, false
 		}
 
-		LogError(err)
+		log.Fatalln(err)
 	}
 
 	return user, true

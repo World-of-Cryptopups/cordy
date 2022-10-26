@@ -34,10 +34,33 @@ func Start(session *discordgo.Session, guildId string) {
 		for _, v := range users {
 			user, err := session.GuildMember(guildId, v.ID)
 			if err != nil {
-				// TODO:: need to parse and check error type in here
-
 				// user does not exist in guild / other problems
 				fmt.Printf("%s | err : %v\n", v.ID, err)
+
+				if errMsg, ok := err.(*discordgo.RESTError); ok {
+					// 10013 == Unknown user
+					if errMsg.Message.Code == 10013 {
+						fmt.Printf("User: %s has left and his data is being removed\n", v.Wallet)
+
+						// send log
+						lib.SendLog(&lib.LogProps{
+							Type:        lib.LogTypeInfo,
+							Title:       "User Left",
+							Description: fmt.Sprintf("User has left the server (**`%s`** - `%s`) and will be removed from the database", v.ID, v.Wallet),
+							Message:     fmt.Sprintf("`%v`", err),
+						})
+
+						// remove the user from the database
+						// - this is for the purpose to remove them from the /leaderboard page
+						//    if they left the server
+						// TODO: user should be removed if he is not in server
+						if err = lib.StopUser(v.ID, v.Wallet); err != nil {
+							log.Printf("Error: %v\n", err)
+						}
+
+						continue
+					}
+				}
 
 				// send log
 				lib.SendLog(&lib.LogProps{
@@ -46,13 +69,6 @@ func Start(session *discordgo.Session, guildId string) {
 					Description: fmt.Sprintf("Failed to get user: **`%s`** and has stopped to update dps, I will try again later.", v.ID),
 					Message:     fmt.Sprintf("`%v`", err),
 				})
-
-				// remove the user from the database
-				// - this is for the purpose to remove them from the /leaderboard page
-				//    if they left the server
-				if err = lib.StopUser(v.ID, v.Wallet); err != nil {
-					log.Printf("Error: %v\n", err)
-				}
 
 				continue
 			}
@@ -66,11 +82,11 @@ func Start(session *discordgo.Session, guildId string) {
 					Type:        lib.LogTypeInfo,
 					Title:       "User has been blacklisted from the services",
 					Description: "The user's wallet is included in the blacklist system of the project",
-					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, all of his data collection will be stopped.", v.Wallet),
+					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, all of his data will be removed from the database", v.Wallet),
 				})
 
 				// if wallet is blacklisted, remove from db
-				if err = lib.StopUser(v.ID, v.Wallet); err != nil {
+				if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
 					log.Printf("Error: %v\n", err)
 				}
 

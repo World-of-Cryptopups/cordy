@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/World-of-Cryptopups/eosrpc.go"
 )
@@ -21,6 +22,14 @@ func GetBlacklists() ([]string, error) {
 	})
 
 	if err != nil {
+		// send log
+		SendLog(&LogProps{
+			Type:        LogTypeError,
+			Title:       "Fetch Blacklists",
+			Description: "Failed to fetch blacklists from contract. Please check this error asap.",
+			Message:     fmt.Sprintf(`%s`, err),
+		})
+
 		return []string{}, err
 	}
 

@@ -41,7 +41,7 @@ func Start(session *discordgo.Session, guildId string) {
 					// 10013 == Unknown user
 					// 10007 == Unknown member
 					if errMsg.Message.Code == discordgo.ErrCodeUnknownUser || errMsg.Message.Code == discordgo.ErrCodeUnknownMember {
-						fmt.Printf("User: %s has left and his data has been stopped\n", v.Wallet)
+						fmt.Printf("User: %s has left and will be removed from the database\n", v.Wallet)
 
 						// send log
 						lib.SendLog(&lib.LogProps{
@@ -54,8 +54,7 @@ func Start(session *discordgo.Session, guildId string) {
 						// remove the user from the database
 						// - this is for the purpose to remove them from the /leaderboard page
 						//    if they left the server
-						// TODO: user should be removed if he is not in server
-						if err = lib.StopUser(v.ID, v.Wallet); err != nil {
+						if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
 							log.Printf("Error: %v\n", err)
 						}
 

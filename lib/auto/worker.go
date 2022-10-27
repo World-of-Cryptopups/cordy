@@ -39,8 +39,9 @@ func Start(session *discordgo.Session, guildId string) {
 
 				if errMsg, ok := err.(*discordgo.RESTError); ok {
 					// 10013 == Unknown user
-					if errMsg.Message.Code == 10013 {
-						fmt.Printf("User: %s has left and his data is being removed\n", v.Wallet)
+					// 10007 == Unknown member
+					if errMsg.Message.Code == discordgo.ErrCodeUnknownUser || errMsg.Message.Code == discordgo.ErrCodeUnknownMember {
+						fmt.Printf("User: %s has left and his data has been stopped\n", v.Wallet)
 
 						// send log
 						lib.SendLog(&lib.LogProps{

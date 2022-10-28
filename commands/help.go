@@ -53,7 +53,7 @@ var helpCommand = &minidis.SlashCommandProps{
 			Fields: []*discordgo.MessageEmbedField{
 				{
 					Name:  "/link",
-					Value: "Link your wax wallet using your auth token from the website (https://www.worldofcryptopups.com/my-collections)",
+					Value: "Link your wax wallet using your auth token from the website (https://www.worldofcryptopups.com/profile)",
 				},
 				{
 					Name:  "/profile",

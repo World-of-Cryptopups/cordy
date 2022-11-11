@@ -42,7 +42,7 @@ var linkCommand = &minidis.SlashCommandProps{
 
 		login := lib.FetchWebLoginToken(token)
 		if login.Token == "" {
-			return c.Edit("This token does not exist, please get your own authentication token at https://worldofcryptopups.cf/my-collections")
+			return c.Edit("This token does not exist, please get your own authentication token at https://www.worldofcryptopups.com/profile")
 		}
 
 		// check if token has been used already

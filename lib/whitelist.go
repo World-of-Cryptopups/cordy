@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -26,7 +27,21 @@ func AddWhitelist(wallet string) (WhitelistResponseProps, error) {
 	body := map[string]interface{}{
 		"wallet": wallet,
 	}
-	err := request.Post(fmt.Sprintf("%s/whitelist", WHITELIST_API), body, &resp)
+	encBody, _ := json.Marshal(body)
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/whitelist", WHITELIST_API), bytes.NewBuffer(encBody))
+	if err != nil {
+		return resp, err
+	}
+
+	req.Header.Set("X-Space-App-Key", WHITELIST_API_KEY)
+
+	r, err := client.Do(req)
+	if err != nil {
+		return resp, err
+	}
+
+	err = json.NewDecoder(r.Body).Decode(&resp)
 
 	return resp, err
 }
@@ -38,6 +53,8 @@ func RemoveWHitelist(wallet string) (WhitelistResponseProps, error) {
 	if err != nil {
 		return resp, err
 	}
+
+	req.Header.Set("X-Space-App-Key", WHITELIST_API_KEY)
 
 	r, err := client.Do(req)
 	if err != nil {

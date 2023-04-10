@@ -8,8 +8,8 @@ import (
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
-	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
+	"github.com/tbdsux/mini-go/mini"
 )
 
 var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
@@ -114,7 +114,7 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 			}
 
 			// check if role is in the dps roles
-			if utils.Includes(role.ID, lib.InitRoles) {
+			if mini.Exists(lib.InitRoles, role.ID) {
 				totalDps := data.Dps.PuppyCards + data.Dps.PupSkinCards + data.Dps.PupItems.Real
 				userRole := lib.GetDPSRoleInfo(totalDps)
 

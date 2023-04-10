@@ -6,8 +6,8 @@ import (
 
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
-	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
+	"github.com/tbdsux/mini-go/mini"
 )
 
 var ListUnreg = &minidis.SlashCommandProps{
@@ -21,7 +21,7 @@ var ListUnreg = &minidis.SlashCommandProps{
 		mems := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range mems {
-			if utils.Includes(lib.VERIFIED_ROLE, v.Roles) {
+			if mini.Exists(v.Roles, lib.VERIFIED_ROLE) {
 				// check if user is registered, if it is do not add to list
 				if _, exists := lib.GetUser(v.User.ID); exists {
 					continue
@@ -61,7 +61,7 @@ var UnlinkUnreg = &minidis.SlashCommandProps{
 		mems := GetAllMembers(c.GuildId, c.Session)
 
 		for _, v := range mems {
-			if utils.Includes(lib.VERIFIED_ROLE, v.Roles) {
+			if mini.Exists(v.Roles, lib.VERIFIED_ROLE) {
 				// check if user is registered, if it is do not add to list
 				if _, exists := lib.GetUser(v.User.ID); exists {
 					continue

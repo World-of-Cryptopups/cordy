@@ -7,9 +7,9 @@ import (
 	"github.com/TheBoringDude/minidis"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
-	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
 	"github.com/deta/deta-go/service/base"
+	"github.com/tbdsux/mini-go/mini"
 )
 
 var linkCommand = &minidis.SlashCommandProps{
@@ -56,7 +56,7 @@ var linkCommand = &minidis.SlashCommandProps{
 		}
 
 		// check if wallet is blacklisted
-		if utils.Includes(login.Wallet, blacklistedWallets) {
+		if mini.Exists(blacklistedWallets, login.Wallet) {
 			// send log
 			lib.SendLog(&lib.LogProps{
 				Type:        lib.LogTypeError,

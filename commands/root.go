@@ -44,6 +44,7 @@ func init() {
 	Bot.AddCommand(admin.FindWalletCommand)
 	Bot.AddCommand(admin.ListUnreg)
 	Bot.AddCommand(admin.UnlinkUnreg)
+	Bot.AddCommand(admin.ListNotExistent)
 
 	// components
 	Bot.AddComponentHandler(profileBtn)

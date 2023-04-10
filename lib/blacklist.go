@@ -7,11 +7,6 @@ import (
 	"github.com/World-of-Cryptopups/eosrpc.go"
 )
 
-var (
-	eos   = eosrpc.New("https://wax.greymass.com")
-	chain = eos.NewChainAPI()
-)
-
 func GetBlacklists() ([]string, error) {
 	table, err := chain.GetTableRows(eosrpc.GetTableRowsProps{
 		Code:  "wocgalleryrw",

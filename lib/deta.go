@@ -232,6 +232,11 @@ func RemoveUser(userid string, wallet string) error {
 		return fmt.Errorf("failed to unlink discord userid from wax wallet. (wallet: %s)", wallet)
 	}
 
+	// remove user from whitelist
+	if err := RemoveWhitelist(wallet); err != nil {
+		return fmt.Errorf("failed to remove wallet (%s) from whitelist, please remove wallet from admin dashboard", wallet)
+	}
+
 	return nil
 
 }

@@ -8,8 +8,8 @@ import (
 	"github.com/World-of-Cryptopups/cordy/commands/admin"
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
-	"github.com/World-of-Cryptopups/cordy/utils"
 	"github.com/bwmarrin/discordgo"
+	"github.com/tbdsux/mini-go/mini"
 )
 
 // start the auto bot fetcher
@@ -21,6 +21,12 @@ func Start(session *discordgo.Session, guildId string) {
 		updatedWallets := 0
 
 		blacklists, err := lib.GetBlacklists()
+		if err != nil {
+			// TODO: improve error hanlding in here
+			log.Println(err)
+		}
+
+		whitelists, err := lib.GetWhitelists()
 		if err != nil {
 			// TODO: improve error hanlding in here
 			log.Println(err)
@@ -74,7 +80,7 @@ func Start(session *discordgo.Session, guildId string) {
 			}
 
 			// check if they are blacklisted
-			if utils.Includes(v.Wallet, blacklists) {
+			if mini.Exists(blacklists, v.Wallet) {
 				fmt.Printf("Wallet is blacklisted: %s | .. Removing it from db\n", v.Wallet)
 
 				// send log
@@ -85,13 +91,32 @@ func Start(session *discordgo.Session, guildId string) {
 					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, all of his data will be removed from the database", v.Wallet),
 				})
 
-				// if wallet is blacklisted, remove from db
-				if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
-					log.Printf("Error: %v\n", err)
-				}
+				go func() {
+					// we do not want this function to block the current process
+					// if wallet is blacklisted, remove from db
+					if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
+						log.Printf("Error: %v\n", err)
+					}
+				}()
 
 				continue
 			}
+
+			go func() {
+				// we do not want this to block the current process
+				// check if wallet does not exist in whitelist, re-add it
+				if !mini.Exists(whitelists, v.Wallet) {
+					if _, err := lib.AddWhitelist(v.Wallet); err != nil {
+						lib.SendLog(&lib.LogProps{
+							Type:        lib.LogTypeError,
+							Title:       "Failed to re-add wallet to whitelist",
+							Description: "There was a problem trying to re-add the wallet to the contract's whitelist. Please redo in the admin dashboard.",
+							Message:     fmt.Sprintf("The user's wallet: %s", v.Wallet),
+						})
+					}
+				}
+
+			}()
 
 			// add `Verified Pups` role if the user is registered but doesn't have it
 			if !admin.HasRole(lib.VERIFIED_ROLE, user.Roles) {

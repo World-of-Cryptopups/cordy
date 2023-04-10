@@ -35,6 +35,7 @@ func AddWhitelist(wallet string) (WhitelistResponseProps, error) {
 	}
 
 	req.Header.Set("X-Space-App-Key", WHITELIST_API_KEY)
+	req.Header.Set("Content-Type", "application/json")
 
 	r, err := client.Do(req)
 	if err != nil {

@@ -46,7 +46,7 @@ func AddWhitelist(wallet string) (WhitelistResponseProps, error) {
 	return resp, err
 }
 
-func RemoveWHitelist(wallet string) (WhitelistResponseProps, error) {
+func RemoveWhitelist(wallet string) (WhitelistResponseProps, error) {
 	var resp WhitelistResponseProps
 
 	req, err := http.NewRequest("DELETE", fmt.Sprintf("%s/whitelist/%s", WHITELIST_API, wallet), nil)
@@ -100,9 +100,4 @@ func GetWhitelists() ([]string, error) {
 	}
 
 	return wallets, nil
-}
-
-func RemoveWhitelist(wallet string) error {
-
-	return nil
 }

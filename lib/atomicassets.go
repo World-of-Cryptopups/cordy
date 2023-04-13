@@ -6,4 +6,4 @@ import (
 	"github.com/World-of-Cryptopups/atomicassets-go"
 )
 
-var Atom, _ = atomicassets.NewCustom("https://atomic.wax.eosrio.io/atomicassets/v1", &http.Client{})
+var Atom, _ = atomicassets.NewCustom("https://wax-aa.eosdac.io/atomicassets/v1", &http.Client{})

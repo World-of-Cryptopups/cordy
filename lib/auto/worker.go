@@ -9,6 +9,7 @@ import (
 	"github.com/World-of-Cryptopups/cordy/lib"
 	"github.com/World-of-Cryptopups/cordy/lib/dps"
 	"github.com/bwmarrin/discordgo"
+	"github.com/deta/deta-go/service/base"
 	"github.com/tbdsux/mini-go/mini"
 )
 
@@ -22,22 +23,39 @@ func Start(session *discordgo.Session, guildId string) {
 
 		blacklists, err := lib.GetBlacklists()
 		if err != nil {
-			// TODO: improve error hanlding in here
-			log.Println(err)
+			log.Fatalf("there was a problem getting the blacklists from contract, pls contact dev\n err: %v\n", err)
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Failed to get blacklists",
+				Description: "pls contact dev to check error",
+				Message:     fmt.Sprintf("%v", err),
+			})
 		}
 
 		whitelists, err := lib.GetWhitelists()
 		if err != nil {
-			// TODO: improve error hanlding in here
-			log.Println(err)
+			log.Fatalf("there was a problem getting the whitelists from contract, pls contact dev\n err: %v\n", err)
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Failed to get whitelists",
+				Description: "pls contact dev to check error",
+				Message:     fmt.Sprintf("%v", err),
+			})
 		}
 
 		users, err := lib.GetAllUser()
 		if err != nil {
-			log.Println(err)
+			log.Fatalf("there was a problem getting all users from database, pls contact dev\n err: %v\n", err)
+			lib.SendLog(&lib.LogProps{
+				Type:        lib.LogTypeError,
+				Title:       "Failed to get users from db",
+				Description: "pls contact dev to check error",
+				Message:     fmt.Sprintf("%v", err),
+			})
 		}
 
 		for _, v := range users {
+			// check if user exists in the discord guild / server
 			user, err := session.GuildMember(guildId, v.ID)
 			if err != nil {
 				// user does not exist in guild / other problems
@@ -60,7 +78,11 @@ func Start(session *discordgo.Session, guildId string) {
 						// remove the user from the database
 						// - this is for the purpose to remove them from the /leaderboard page
 						//    if they left the server
-						if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
+						if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
+							Session:    session,
+							GuildID:    guildId,
+							UserExists: false,
+						}, "user left"); err != nil {
 							log.Printf("Error: %v\n", err)
 						}
 
@@ -70,7 +92,7 @@ func Start(session *discordgo.Session, guildId string) {
 
 				// send log
 				lib.SendLog(&lib.LogProps{
-					Type:        lib.LogTypeInfo,
+					Type:        lib.LogTypeError,
 					Title:       "User Get Failed",
 					Description: fmt.Sprintf("Failed to get user: **`%s`** and has stopped to update dps, I will try again later.", v.ID),
 					Message:     fmt.Sprintf("`%v`", err),
@@ -87,14 +109,18 @@ func Start(session *discordgo.Session, guildId string) {
 				lib.SendLog(&lib.LogProps{
 					Type:        lib.LogTypeInfo,
 					Title:       "User has been blacklisted from the services",
-					Description: "The user's wallet is included in the blacklist system of the project",
-					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, all of his data will be removed from the database", v.Wallet),
+					Description: fmt.Sprintf("<!%s>'s wallet exists in the contract's blacklists, please check user.", v.ID),
+					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, users' data will be marked from db", v.Wallet),
 				})
 
 				go func() {
 					// we do not want this function to block the current process
-					// if wallet is blacklisted, remove from db
-					if err = lib.RemoveUser(v.ID, v.Wallet); err != nil {
+					// if wallet is blacklisted, auto-unlink user
+					if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
+						UserExists: true,
+						Session:    session,
+						GuildID:    guildId,
+					}, "blacklisted"); err != nil {
 						log.Printf("Error: %v\n", err)
 					}
 				}()
@@ -102,27 +128,48 @@ func Start(session *discordgo.Session, guildId string) {
 				continue
 			}
 
-			go func() {
-				// we do not want this to block the current process
-				// check if wallet does not exist in whitelist, re-add it
-				if !mini.Exists(whitelists, v.Wallet) {
-					if _, err := lib.AddWhitelist(v.Wallet); err != nil {
-						lib.SendLog(&lib.LogProps{
-							Type:        lib.LogTypeError,
-							Title:       "Failed to re-add wallet to whitelist",
-							Description: "There was a problem trying to re-add the wallet to the contract's whitelist. Please redo in the admin dashboard.",
-							Message:     fmt.Sprintf("The user's wallet: %s", v.Wallet),
-						})
+			// check if wallet exists in the whitelist list from contract
+			if !mini.Exists(whitelists, v.Wallet) {
+				// if wallet does not exist, update user's data key `is_whitelisted` to false
+				lib.SendLog(&lib.LogProps{
+					Type:        lib.LogTypeInfo,
+					Title:       "Missing from whitelist",
+					Description: fmt.Sprintf("<!%s>'s wallet does not exist in whitelist, please re-check with user.", v.ID),
+					Message:     fmt.Sprintf("The user's wallet: **`%s`** has is missing from contract's whitelist.", v.Wallet),
+				})
+
+				go func() {
+					// we do not want this function to block the current process
+					// if wallet is blacklisted, auto-unlink user
+					if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
+						UserExists: true,
+						Session:    session,
+						GuildID:    guildId,
+					}, "missing from whitelist"); err != nil {
+						log.Printf("Error: %v\n", err)
 					}
+				}()
+
+				continue
+			} else {
+				// TODO: might have a better function than this
+
+				usersBase := lib.UsersBase()
+
+				if err := usersBase.Update(v.ID, base.Updates{
+					"is_whitelisted":         true,
+					"not_whitelisted_reason": "",
+				}); err != nil {
+					log.Printf("failed to update user (user is in whitelist), err: %v\n", err)
 				}
+			}
 
-			}()
-
-			// add `Verified Pups` role if the user is registered but doesn't have it
+			// add `Linked Pups` role if the user is registered but doesn't have it
 			if !admin.HasRole(lib.VERIFIED_ROLE, user.Roles) {
 				session.GuildMemberRoleAdd(guildId, user.User.ID, lib.VERIFIED_ROLE)
 			}
 
+			// == calculate dps in
 			data := dps.Calculate(v.Wallet)
 			totalDps := data.PuppyCards + data.PupSkinCards + data.PupItems.Real
 

@@ -1,11 +1,13 @@
 package lib
 
 type User struct {
-	Key       string `json:"key"`
-	ID        string `json:"id"`
-	Wallet    string `json:"wallet"`
-	Token     string `json:"token"`
-	IsStopped bool   `json:"is_stopped"`
+	Key                  string `json:"key"`
+	ID                   string `json:"id"`
+	Wallet               string `json:"wallet"`
+	Token                string `json:"token"`
+	IsStopped            bool   `json:"is_stopped"`
+	IsWhitelisted        bool   `json:"is_whitelisted"`
+	NotWhitelistedReason string `json:"not_whitelisted_reason"`
 }
 
 type UserDpsProps struct {

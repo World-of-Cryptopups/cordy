@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/deta/deta-go/deta"
 	"github.com/deta/deta-go/service/base"
 )
@@ -209,20 +210,29 @@ func StopUser(userid string, wallet string) error {
 	return nil
 }
 
-// removes the user from the databases
-func RemoveUser(userid string, wallet string) error {
+type UserSession struct {
+	Session    *discordgo.Session
+	UserExists bool
+	GuildID    string
+}
+
+// remove the user from the whitelist
+// remove `Linked Pup` role of user
+// params:
+//   - userid: user's discord id
+//   - wallet: users' wallet
+//   - userExists: checker if user exists or not and use
+//   - reason: reason user is unlinked, useful for admin dashboard
+func UnlinkUser(userid string, wallet string, userSession UserSession, reason string) error {
 	usersBase := UsersBase()
-	dpsBase := UsersDpsBase()
 	loginsBase := WebLoginBase()
 
-	// remove id from registered users
-	if err := usersBase.Delete(userid); err != nil {
+	// update user's keys
+	if err := usersBase.Update(userid, base.Updates{
+		"is_whitelisted":         false,
+		"not_whitelisted_reason": reason,
+	}); err != nil {
 		return fmt.Errorf("failed to remove user from database. (user: %s)", userid)
-	}
-
-	// remove data from the dps database
-	if err := dpsBase.Delete(userid); err != nil {
-		return fmt.Errorf("failed remove user's dps data from database. (user: %s)", userid)
 	}
 
 	// unlink discord id from wallet
@@ -230,6 +240,18 @@ func RemoveUser(userid string, wallet string) error {
 		"linked": false,
 	}); err != nil {
 		return fmt.Errorf("failed to unlink discord userid from wax wallet. (wallet: %s)", wallet)
+	}
+
+	// remove discord role if user exists
+	// will not proceed if user left
+	if userSession.UserExists {
+		// session should not be null in here
+		if userSession.Session == nil {
+			return fmt.Errorf("dev error: session should not be null")
+		}
+
+		// remove `Linked Pup` role
+		userSession.Session.GuildMemberRoleRemove(userSession.GuildID, userid, VERIFIED_ROLE)
 	}
 
 	// remove user from whitelist

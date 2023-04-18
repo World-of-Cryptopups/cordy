@@ -14,7 +14,7 @@ import (
 
 var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 	Name:                     "get-verified-wallets",
-	Description:              "Gets the wallets of the verified users.",
+	Description:              "Gets the wallets of the verified users. (Also checks if they are whitelisted or not)",
 	DefaultMemberPermissions: 0,
 	Execute: func(c *minidis.SlashContext) error {
 		c.DeferReply(false)
@@ -43,6 +43,11 @@ var GetVerifiedWalletsCommand = &minidis.SlashCommandProps{
 		for _, v := range verifiedMems {
 			user, exists := lib.GetUser(v.User.ID)
 			if !exists {
+				continue
+			}
+
+			// do not include if `is_whitelisted` key is false
+			if !user.IsWhitelisted {
 				continue
 			}
 
@@ -101,6 +106,11 @@ var GetRoleWalletsCommand = &minidis.SlashCommandProps{
 		for _, v := range roleMems {
 			user, exists := lib.GetUser(v.User.ID)
 			if !exists {
+				continue
+			}
+
+			// do not include if `is_whitelisted` key is false
+			if !user.IsWhitelisted {
 				continue
 			}
 

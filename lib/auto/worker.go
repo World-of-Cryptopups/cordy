@@ -65,13 +65,18 @@ func Start(session *discordgo.Session, guildId string) {
 					// 10013 == Unknown user
 					// 10007 == Unknown member
 					if errMsg.Message.Code == discordgo.ErrCodeUnknownUser || errMsg.Message.Code == discordgo.ErrCodeUnknownMember {
-						fmt.Printf("User: %s has left and will be removed from the database\n", v.Wallet)
+						if !v.IsWhitelisted {
+							// if `is_whitelisted` is already false, no need to repeat the functions below it
+							continue
+						}
+
+						fmt.Printf("User: %s has left\n", v.Wallet)
 
 						// send log
 						lib.SendLog(&lib.LogProps{
 							Type:        lib.LogTypeInfo,
 							Title:       "User Left",
-							Description: fmt.Sprintf("User has left the server (**`%s`** - `%s`) and will be removed from the database", v.ID, v.Wallet),
+							Description: fmt.Sprintf("User has left the server (**`%s`** - `%s`)", v.ID, v.Wallet),
 							Message:     fmt.Sprintf("`%v`", err),
 						})
 

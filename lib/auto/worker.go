@@ -108,7 +108,12 @@ func Start(session *discordgo.Session, guildId string) {
 
 			// check if they are blacklisted
 			if mini.Exists(blacklists, v.Wallet) {
-				fmt.Printf("Wallet is blacklisted: %s | .. Removing it from db\n", v.Wallet)
+				if !v.IsWhitelisted {
+					// if `is_whitelisted` is already false, no need to repeat the functions below it
+					continue
+				}
+
+				fmt.Printf("Wallet is blacklisted: %s\n", v.Wallet)
 
 				// send log
 				lib.SendLog(&lib.LogProps{
@@ -118,23 +123,25 @@ func Start(session *discordgo.Session, guildId string) {
 					Message:     fmt.Sprintf("The user's wallet: **`%s`** has been blacklisted, users' data will be marked from db", v.Wallet),
 				})
 
-				go func() {
-					// we do not want this function to block the current process
-					// if wallet is blacklisted, auto-unlink user
-					if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
-						UserExists: true,
-						Session:    session,
-						GuildID:    guildId,
-					}, "blacklisted"); err != nil {
-						log.Printf("Error: %v\n", err)
-					}
-				}()
+				// if wallet is blacklisted, auto-unlink user
+				if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
+					UserExists: true,
+					Session:    session,
+					GuildID:    guildId,
+				}, "blacklisted"); err != nil {
+					log.Printf("Error: %v\n", err)
+				}
 
 				continue
 			}
 
 			// check if wallet exists in the whitelist list from contract
 			if !mini.Exists(whitelists, v.Wallet) {
+				if !v.IsWhitelisted {
+					// if `is_whitelisted` is already false, no need to repeat the functions below it
+					continue
+				}
+
 				// if wallet does not exist, update user's data key `is_whitelisted` to false
 				lib.SendLog(&lib.LogProps{
 					Type:        lib.LogTypeInfo,
@@ -143,30 +150,25 @@ func Start(session *discordgo.Session, guildId string) {
 					Message:     fmt.Sprintf("The user's wallet: **`%s`** has is missing from contract's whitelist.", v.Wallet),
 				})
 
-				go func() {
-					// we do not want this function to block the current process
-					// if wallet is blacklisted, auto-unlink user
-					if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
-						UserExists: true,
-						Session:    session,
-						GuildID:    guildId,
-					}, "missing from whitelist"); err != nil {
-						log.Printf("Error: %v\n", err)
-					}
-				}()
+				// if wallet is missing from whitelist, unlink user
+				if err = lib.UnlinkUser(v.ID, v.Wallet, lib.UserSession{
+					UserExists: true,
+					Session:    session,
+					GuildID:    guildId,
+				}, "missing from whitelist"); err != nil {
+					log.Printf("Error: %v\n", err)
+				}
 
 				continue
-			} else {
-				// TODO: might have a better function than this
+			}
 
-				usersBase := lib.UsersBase()
-
-				if err := usersBase.Update(v.ID, base.Updates{
-					"is_whitelisted":         true,
-					"not_whitelisted_reason": "",
-				}); err != nil {
-					log.Printf("failed to update user (user is in whitelist), err: %v\n", err)
-				}
+			// update user's whitelist details
+			usersBase := lib.UsersBase()
+			if err := usersBase.Update(v.ID, base.Updates{
+				"is_whitelisted":         true,
+				"not_whitelisted_reason": "",
+			}); err != nil {
+				log.Printf("failed to update user (user is in whitelist), err: %v\n", err)
 			}
 
 			// add `Linked Pups` role if the user is registered but doesn't have it

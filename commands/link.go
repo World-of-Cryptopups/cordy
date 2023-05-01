@@ -34,12 +34,6 @@ var linkCommand = &minidis.SlashCommandProps{
 
 		userid := c.Author.ID
 
-		_, exists := lib.GetUser(userid)
-		if exists {
-			// if already linked, show error
-			return c.Edit("You currently have a linked wallet. If you want to change, please contact an admin. Thank you~")
-		}
-
 		login := lib.FetchWebLoginToken(token)
 		if login.Token == "" {
 			return c.Edit("This token does not exist, please get your own authentication token at https://www.worldofcryptopups.com/profile")
